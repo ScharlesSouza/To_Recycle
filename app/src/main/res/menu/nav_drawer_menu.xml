@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view">
+
+    <group android:checkableBehavior="single">
+        <item
+        android:id="@+id/nav_reciclaveis"
+        android:icon="@mipmap/ic_reciclagem"
+        android:title="O que Reaproveitar" />
+        <item
+            android:id="@+id/nav_Locais"
+            android:icon="@mipmap/ic_local"
+            android:title="Pontos de Entrega Voluntaria" />
+        <item
+            android:id="@+id/nav_descarte"
+            android:icon="@mipmap/ic_lixeira"
+            android:title="Descarte, Vem buscar!" />
+        <item
+            android:id="@+id/nav_catadores"
+            android:icon="@mipmap/ic_grupo"
+            android:title="Catadores" />
+        <item
+            android:id="@+id/nav_orgaos"
+            android:icon="@mipmap/ic_parceiro"
+            android:title="Orgãos Publicos" />
+        <item
+            android:id="@+id/nav_parceiros"
+            android:icon="@mipmap/ic_parceiro"
+            android:title="Parceiros" />
+        <item
+            android:id="@+id/nav_loja"
+            android:icon="@mipmap/ic_carrinho_black"
+            android:title="Loja" />
+        <item
+            android:id="@+id/nav_leis"
+            android:icon="@mipmap/ic_martelo_lei"
+            android:title="Leis" />
+        <item
+            android:id="@+id/nav_camera"
+            android:icon="@drawable/ic_menu_camera"
+            android:title="Import" />
+        <item
+            android:id="@+id/nav_galeria"
+            android:icon="@drawable/ic_menu_gallery"
+            android:title="Galeria" />
+        <item
+            android:id="@+id/nav_slideshow"
+            android:icon="@drawable/ic_menu_slideshow"
+            android:title="Slideshow" />
+
+    </group>
+
+    <item android:title="Communicate">
+        <menu>
+            <item
+                android:id="@+id/nav_share"
+                android:icon="@drawable/ic_menu_share"
+                android:title="Share" />
+            <item
+                android:id="@+id/nav_send"
+                android:icon="@drawable/ic_menu_send"
+                android:title="Send" />
+            <item
+                android:id="@+id/nav_manage"
+                android:icon="@drawable/ic_menu_manage"
+                android:title="Configurações" />
+            <item
+                android:id="@+id/nav_sobre"
+                android:title="Sobre" />
+        </menu>
+    </item>
+
+</menu>
