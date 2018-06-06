@@ -13,6 +13,7 @@
         <item>Vidro</item>
         <item>Organico</item>
     </string-array>
+    <string name="title_activity_maps">Mapa</string>
 
 
 </resources>

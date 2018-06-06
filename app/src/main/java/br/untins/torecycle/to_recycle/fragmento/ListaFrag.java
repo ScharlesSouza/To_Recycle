@@ -87,6 +87,7 @@ public class ListaFrag extends Fragment {
         lista.setHasFixedSize(true);
 
         Adaptador adapt = new Adaptador(getActivity(), dataSource);
+        adapt.notifyDataSetChanged();
         lista.setAdapter(adapt);
 
         return viewFragment;
@@ -251,6 +252,7 @@ public class ListaFrag extends Fragment {
                         public void onClick(DialogInterface arg0, int arg1) {
                             //NetworkUtils.Apagar(lista.get(position));
                             Toast.makeText(contexto, lista.get(position).getMaterial() +" Apagada", Toast.LENGTH_SHORT).show();
+
                         }
                     });
                     //define um botão como negativo.
@@ -262,6 +264,7 @@ public class ListaFrag extends Fragment {
                     alerta = builder.create();
                     //Exibe
                     alerta.show();
+                    
                     return true;
                 }
 
