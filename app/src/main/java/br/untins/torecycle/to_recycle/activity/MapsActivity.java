@@ -65,6 +65,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
+
+
+
+
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
@@ -90,15 +94,17 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         mMap = googleMap;
 
         // Add a marker in Sydney and move the camera
-        LatLng recife = new LatLng(-8.065638, -34.891130);
-        mMap.addMarker(new MarkerOptions().position(recife).title("Marcador em Recife"));
+        LatLng localAtual = new LatLng(-10.1821548, -48.3496762);
+        mMap.addMarker(new MarkerOptions().position(localAtual).title("Marcador em Recife"));
 
-        CameraPosition cameraPosition = new CameraPosition.Builder().zoom(15).target(recife).build();
+        CameraPosition cameraPosition = new CameraPosition.Builder().zoom(15).target(localAtual).build();
 
         mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
 
         mMap.setMapType(GoogleMap.MAP_TYPE_HYBRID);
     }
+
+
 
     @Override
     public void onLocationChanged(Location location) {

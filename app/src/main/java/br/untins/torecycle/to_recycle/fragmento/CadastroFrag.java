@@ -43,6 +43,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import br.untins.torecycle.to_recycle.R;
+import br.untins.torecycle.to_recycle.activity.LocalizacaoMaps;
+import br.untins.torecycle.to_recycle.activity.MapsActivity;
 
 
 /**
@@ -94,7 +96,6 @@ public class CadastroFrag extends Fragment implements GoogleApiClient.Connection
 
 
         campoDescricao = (EditText) getActivity().findViewById(R.id.descricaoCadastro);
-        campoLocalizacao = (EditText) getActivity().findViewById(R.id.localizacaoCadastro);
 
 
         //teste de localização
@@ -145,6 +146,31 @@ public class CadastroFrag extends Fragment implements GoogleApiClient.Connection
             Log.i("GPS", e.getMessage());
         }
 */
+
+
+        //chama o mapa com a localização atual do usuario
+        Button btnLocalizacao = (Button)viewFragment.findViewById(R.id.btnLocalizacao);
+        btnLocalizacao.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Bundle parametros = new Bundle();
+
+                //chama a proxima tela
+                Context contexto = null;
+                contexto = getContext();
+                Intent intent = new Intent(contexto, LocalizacaoMaps.class);
+
+                parametros.putDouble("latitude", latitude);
+                parametros.putDouble("logitude",longitude);
+
+                intent.putExtras(parametros);
+
+                contexto.startActivity(intent);
+            }
+        });
+
+
 
         // Chama a tela Cadastro Esvento
         Button btnCadastrar = (Button) viewFragment.findViewById(R.id.btnCadastrar);
