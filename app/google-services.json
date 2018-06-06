@@ -1,0 +1,59 @@
+{
+  "project_info": {
+    "project_number": "684454095283",
+    "firebase_url": "https://torecycle-db5e4.firebaseio.com",
+    "project_id": "torecycle-db5e4",
+    "storage_bucket": "torecycle-db5e4.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:684454095283:android:e2dee7e928c74d13",
+        "android_client_info": {
+          "package_name": "br.untins.torecycle.to_recycle"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "684454095283-483ipsqlaq4l2hs34o67h8oltaprtns4.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "br.untins.torecycle.to_recycle",
+            "certificate_hash": "5a65a1bf3cdbfdc7f0df771b034d2cf48817009b"
+          }
+        },
+        {
+          "client_id": "684454095283-5kv512dgenn25i8ivvghiatqdg81qag6.apps.googleusercontent.com",
+          "client_type": 3
+        },
+        {
+          "client_id": "684454095283-5kv512dgenn25i8ivvghiatqdg81qag6.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCrmO_5mWhzhIWqdy1131BVOZLJB95pWOw"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "684454095283-5kv512dgenn25i8ivvghiatqdg81qag6.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

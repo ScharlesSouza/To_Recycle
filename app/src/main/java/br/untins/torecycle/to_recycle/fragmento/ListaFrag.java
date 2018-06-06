@@ -264,7 +264,7 @@ public class ListaFrag extends Fragment {
                     alerta = builder.create();
                     //Exibe
                     alerta.show();
-                    
+
                     return true;
                 }
 
