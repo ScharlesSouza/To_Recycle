@@ -74,7 +74,11 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
         startGettingLocations();
+
+        //instancia do Firebase na minha aplicação
         mDatabase = FirebaseDatabase.getInstance().getReference();
+
+        //pega todas as localizações contidas no dumento Firebase
         getMarkers();
 
     }
@@ -124,10 +128,15 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         CameraPosition cameraPosition = new CameraPosition.Builder().zoom(15).target(currentLocationLatLong).build();
         mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
 
-        LocationData locationData = new LocationData(location.getLatitude(), location.getLongitude());
-        mDatabase.child("location").child(String.valueOf(new Date().getTime())).setValue(locationData);
+        //instancia do objeto de localização com latitude e longitute - este objeto que sera salvo no Firebase
+        //LocationData locationData = new LocationData(location.getLatitude(), location.getLongitude());
+
+        //Criando o documento (tabela) "location" no Firebase - com chaves identificadoras pelo tempo de inserção
+        //mDatabase.child("location").child(String.valueOf(new Date().getTime())).setValue(locationData);
 
         Toast.makeText(this, "Localização atualizada", Toast.LENGTH_SHORT).show();
+
+        //pega todas as localizações contidas no dumento Firebase
         getMarkers();
 
     }
@@ -247,6 +256,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         }
     }
 
+    //metodo que acessa ao documento(tabela) "location" no banco firebase e tras todas as linhas
     private void getMarkers(){
 
         mDatabase.child("location").addListenerForSingleValueEvent(
@@ -265,6 +275,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 });
     }
 
+
+    //metodo que passa cada localização para ser marcado de verde pelo metodo addGreenMarker
     private void getAllLocations(Map<String,Object> locations) {
 
 
@@ -282,6 +294,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     }
 
+    //metodo que marca o pontos verde no GoogleMaps
     private void addGreenMarker(Date newDate, LatLng latLng) {
         SimpleDateFormat dt = new SimpleDateFormat("dd/MM/yyyy hh:mm:ss");
         MarkerOptions markerOptions = new MarkerOptions();

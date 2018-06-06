@@ -3,11 +3,11 @@ package br.untins.torecycle.to_recycle.activity;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 
-import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
@@ -16,8 +16,10 @@ import br.untins.torecycle.to_recycle.R;
 public class LocalizacaoMaps extends FragmentActivity implements OnMapReadyCallback {
 
     private GoogleMap mMap;
+
     Double latitude =null;
     Double longitude = null;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,18 +56,26 @@ public class LocalizacaoMaps extends FragmentActivity implements OnMapReadyCallb
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
+        //tipo de mapa
+        mMap.setMapType(GoogleMap.MAP_TYPE_HYBRID);
 
 
-
-        // Add a marker in Sydney and move the camera
+        // Add as coordenadas a uma variavel de coordenadas
         LatLng location = new LatLng(latitude, longitude);
 
-        //posiciona o mapa na coordenada passada
-        CameraUpdate atualizaVisaoCamera = CameraUpdateFactory.newLatLngZoom(location, 13);
-        mMap.moveCamera(atualizaVisaoCamera);
         //marcador no mapa
         mMap.addMarker(new MarkerOptions().position(location).title("Local"));
-        //tipo de mapa
-       mMap.setMapType(GoogleMap.MAP_TYPE_HYBRID);
+
+
+        //posiciona o mapa na coordenada passada
+        CameraPosition cameraPosition = new CameraPosition.Builder().zoom(6).target(location).build();
+        mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
+
+        //CameraUpdate atualizaVisaoCamera = CameraUpdateFactory.newLatLngZoom(location, 6);
+        //mMap.moveCamera(atualizaVisaoCamera);
+
+
     }
+
+
 }

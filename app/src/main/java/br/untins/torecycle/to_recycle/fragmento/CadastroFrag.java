@@ -375,13 +375,14 @@ public class CadastroFrag extends Fragment implements GoogleApiClient.Connection
 
     @Override
     public void onLocationChanged(Location location) {
+        /*
         txtLatitude = (TextView) getActivity().findViewById(R.id.textLatitude);
         txtLongitude = (TextView) getActivity().findViewById(R.id.textLongitude);
         if (location != null){
            // txtLatitude.setText(String.valueOf(location.getLatitude()));
            // txtLongitude.setText(String.valueOf(location.getLongitude()));
         }
-
+        */
 
     }
 
