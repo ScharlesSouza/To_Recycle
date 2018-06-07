@@ -1,6 +1,5 @@
 package br.untins.torecycle.to_recycle.activity;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -17,6 +16,9 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import br.untins.torecycle.to_recycle.R;
+import br.untins.torecycle.to_recycle.fragmento.CadastroDescarteFrag;
+import br.untins.torecycle.to_recycle.fragmento.ListaResiduosFrag;
+import br.untins.torecycle.to_recycle.fragmento.PevMapaFrag;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -49,7 +51,7 @@ public class MainActivity extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
 
         //carrega o framento na view que recebera os containers
-        getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainer, new br.untins.torecycle.to_recycle.fragmento.ListaFrag()).commit();
+        getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainer, new ListaResiduosFrag()).commit();
 
     }
 
@@ -107,19 +109,19 @@ public class MainActivity extends AppCompatActivity
         } else if (id == R.id.nav_parceiros) {
             // Handle the camera action
         } else if (id == R.id.nav_catadores) {
-
+            getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainer, new PevMapaFrag()).commit();
             // Handle the camera action
         } else if (id == R.id.nav_descarte) {
             //carrega o framento na view que recebera os containers
-            getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainer, new br.untins.torecycle.to_recycle.fragmento.CadastroFrag()).commit();
+            getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainer, new CadastroDescarteFrag()).commit();
         } else if (id == R.id.nav_Locais) {
             // Handle the camera action
             Context contexto = this;
-            Intent intent = new Intent(contexto, MapsActivity.class);
+            Intent intent = new Intent(contexto, PevMapaActivity.class);
             contexto.startActivity(intent);
         } else if (id == R.id.nav_reciclaveis) {
             //carrega o framento na view que recebera os containers
-            getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainer, new br.untins.torecycle.to_recycle.fragmento.ListaFrag()).commit();
+            getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainer, new ListaResiduosFrag()).commit();
 
         } else if (id == R.id.nav_camera) {
             // Handle the camera action

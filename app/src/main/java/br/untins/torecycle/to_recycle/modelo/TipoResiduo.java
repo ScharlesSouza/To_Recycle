@@ -6,7 +6,7 @@ import android.widget.TextView;
 
 import br.untins.torecycle.to_recycle.R;
 
-public class LixoItemLista {
+public class TipoResiduo {
 
 
     String material;
@@ -15,7 +15,7 @@ public class LixoItemLista {
 
 
 
-    public LixoItemLista( String sMaterial){
+    public TipoResiduo(String sMaterial){
 
        setMaterial(sMaterial);
 

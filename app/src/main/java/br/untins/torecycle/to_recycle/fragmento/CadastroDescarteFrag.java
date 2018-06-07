@@ -23,7 +23,6 @@ import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewDebug;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -36,21 +35,20 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 import br.untins.torecycle.to_recycle.R;
-import br.untins.torecycle.to_recycle.activity.LocalizacaoMaps;
-import br.untins.torecycle.to_recycle.activity.MapsActivity;
+import br.untins.torecycle.to_recycle.activity.LocalizacaoMapaActivity;
+
 
 
 /**
  * A simple {@link Fragment} subclass.
  */
-public class CadastroFrag extends Fragment implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener {
+public class CadastroDescarteFrag extends Fragment implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener {
 
     Spinner spinnerMaterial;
     Button btnCadastro;
@@ -74,7 +72,7 @@ public class CadastroFrag extends Fragment implements GoogleApiClient.Connection
     private DatabaseReference mDatabase;
 
 
-    public CadastroFrag() {
+    public CadastroDescarteFrag() {
         // Required empty public constructor
 
     }
@@ -159,14 +157,17 @@ public class CadastroFrag extends Fragment implements GoogleApiClient.Connection
                 //chama a proxima tela
                 Context contexto = null;
                 contexto = getContext();
-                Intent intent = new Intent(contexto, LocalizacaoMaps.class);
+                Intent intent = new Intent(contexto, LocalizacaoMapaActivity.class);
 
                 parametros.putDouble("latitude", latitude);
                 parametros.putDouble("logitude",longitude);
 
                 intent.putExtras(parametros);
 
-                contexto.startActivity(intent);
+                //contexto.startActivity(intent);
+
+                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainer, new LocalizacaoMapaFrag()).commit();
+
             }
         });
 

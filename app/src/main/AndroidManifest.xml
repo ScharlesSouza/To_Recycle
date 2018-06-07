@@ -32,7 +32,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".activity.ActivityDetails"
+            android:name=".activity.DetailsActivity"
             android:screenOrientation="portrait"></activity>
 
         <!--
@@ -48,11 +48,11 @@
             android:value="@string/google_maps_key" />
 
         <activity
-        android:name=".activity.MapsActivity"
+        android:name=".activity.PevMapaActivity"
         android:label="@string/title_activity_maps"></activity>
 
         <activity
-            android:name=".activity.LocalizacaoMaps"
+            android:name=".activity.LocalizacaoMapaActivity"
             android:label="@string/title_activity_maps"></activity>
 
     </application>

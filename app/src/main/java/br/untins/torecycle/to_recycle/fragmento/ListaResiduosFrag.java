@@ -3,7 +3,6 @@ package br.untins.torecycle.to_recycle.fragmento;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -18,33 +17,26 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
-import com.squareup.okhttp.OkHttpClient;
-import com.squareup.okhttp.Request;
-import com.squareup.okhttp.Response;
-
-import java.io.IOException;
 import java.util.ArrayList;
 
 import br.untins.torecycle.to_recycle.R;
-import br.untins.torecycle.to_recycle.activity.ActivityDetails;
+import br.untins.torecycle.to_recycle.activity.DetailsActivity;
 import br.untins.torecycle.to_recycle.modelo.ItemHolder;
-import br.untins.torecycle.to_recycle.modelo.LixoItemLista;
+import br.untins.torecycle.to_recycle.modelo.TipoResiduo;
 
 
-public class ListaFrag extends Fragment {
+public class ListaResiduosFrag extends Fragment {
 
     //private RecyclerView meuRecycleView;
-    //private ArrayList<LixoItemLista> lista = null;
+    //private ArrayList<TipoResiduo> lista = null;
 
-    ArrayList<LixoItemLista> dataSource = null;
+    ArrayList<TipoResiduo> dataSource = null;
     View viewFragment = null;
     RecyclerView lista = null;
 
 
 
-    public ListaFrag() {
+    public ListaResiduosFrag() {
         // Required empty public constructor
 
     }
@@ -56,7 +48,7 @@ public class ListaFrag extends Fragment {
 
 
         // Inflate the layout for this fragment
-        viewFragment = inflater.inflate(R.layout.fragment_lista, null);
+        viewFragment = inflater.inflate(R.layout.fragment_lista_residuos, null);
 /*
         //Acesso ao WebService
         BuscaDadosWebServices busca = new BuscaDadosWebServices(getContext());
@@ -69,16 +61,16 @@ public class ListaFrag extends Fragment {
 
         //Adicionando fixamente os itens, exemplo
 
-        dataSource.add(new LixoItemLista("Papel"));
-        dataSource.add(new LixoItemLista("Plástico"));
-        dataSource.add(new LixoItemLista("Metal"));
-        dataSource.add(new LixoItemLista("Vidro"));
-        dataSource.add(new LixoItemLista("Orgânico"));
-        dataSource.add(new LixoItemLista("Lixo não Reciclável"));
-        dataSource.add(new LixoItemLista("Eletronico"));
-        dataSource.add(new LixoItemLista("Hospitalar"));
-        dataSource.add(new LixoItemLista("Entulho"));
-        dataSource.add(new LixoItemLista("Doações"));
+        dataSource.add(new TipoResiduo("Papel"));
+        dataSource.add(new TipoResiduo("Plástico"));
+        dataSource.add(new TipoResiduo("Metal"));
+        dataSource.add(new TipoResiduo("Vidro"));
+        dataSource.add(new TipoResiduo("Orgânico"));
+        dataSource.add(new TipoResiduo("Lixo não Reciclável"));
+        dataSource.add(new TipoResiduo("Eletronico"));
+        dataSource.add(new TipoResiduo("Hospitalar"));
+        dataSource.add(new TipoResiduo("Entulho"));
+        dataSource.add(new TipoResiduo("Doações"));
 
 
         lista = (RecyclerView)viewFragment.findViewById(R.id.listaPrincipal);
@@ -99,7 +91,7 @@ public class ListaFrag extends Fragment {
     /*
 
                                                     //Parametros/Progesso/Resultado
-        public class BuscaDadosWebServices extends AsyncTask<String, Void, ArrayList<LixoItemLista>> {
+        public class BuscaDadosWebServices extends AsyncTask<String, Void, ArrayList<TipoResiduo>> {
 
             private Context meuContexto;
             private View minhaView;
@@ -133,9 +125,9 @@ public class ListaFrag extends Fragment {
             //Retorna um objeto qualquer pelo POST EXECUTE
 
             @Override
-            protected ArrayList<LixoItemLista> doInBackground(String... strings) {
+            protected ArrayList<TipoResiduo> doInBackground(String... strings) {
 
-                ArrayList<LixoItemLista> vetorCarros = null;
+                ArrayList<TipoResiduo> vetorCarros = null;
 
                 Log.i("INFO", "DURANTE DA THREAD");
                 String jSon = "";
@@ -147,7 +139,7 @@ public class ListaFrag extends Fragment {
                     Response resposta =  cliente.newCall(requisicao).execute();
                     jSon = resposta.body().string();
 
-                    vetorCarros = gson.fromJson(jSon, new TypeToken<ArrayList<LixoItemLista>>(){         }.getType());
+                    vetorCarros = gson.fromJson(jSon, new TypeToken<ArrayList<TipoResiduo>>(){         }.getType());
 
 
 
@@ -165,7 +157,7 @@ public class ListaFrag extends Fragment {
 
             //Chamado após a execução da thread
             //Executa na MAIN THREAD
-            protected void onPostExecute(ArrayList<LixoItemLista> materialLixo) {
+            protected void onPostExecute(ArrayList<TipoResiduo> materialLixo) {
 
                 Log.i("INFO", "DEPOIS DA THREAD");
 
@@ -191,10 +183,10 @@ public class ListaFrag extends Fragment {
     public class Adaptador extends RecyclerView.Adapter<ItemHolder>{
 
         Context contexto = null;
-        ArrayList<LixoItemLista> lista = null;
+        ArrayList<TipoResiduo> lista = null;
         private AlertDialog alerta;
 
-        public Adaptador(Context contexto, ArrayList<LixoItemLista> lista){
+        public Adaptador(Context contexto, ArrayList<TipoResiduo> lista){
 
             this.contexto = contexto;
             this.lista = lista;
@@ -216,7 +208,7 @@ public class ListaFrag extends Fragment {
          * */
         @Override
         public void onBindViewHolder(@NonNull ItemHolder holder, final int position) {
-            LixoItemLista item = lista.get(position);
+            TipoResiduo item = lista.get(position);
 
             holder.getTextoMaterial().setText(item.getMaterial());
 
@@ -226,7 +218,7 @@ public class ListaFrag extends Fragment {
                 public void onClick(View view) {
 
                     contexto = view.getContext();
-                    Intent intent = new Intent(contexto, ActivityDetails.class);
+                    Intent intent = new Intent(contexto, DetailsActivity.class);
                     String posicao = Integer.toString(position);
                     Log.d("posicao", posicao);
                     intent.putExtra("Nome", lista.get(position).getMaterial());

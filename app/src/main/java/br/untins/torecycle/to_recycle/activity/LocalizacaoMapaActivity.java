@@ -13,7 +13,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 
 import br.untins.torecycle.to_recycle.R;
 
-public class LocalizacaoMaps extends FragmentActivity implements OnMapReadyCallback {
+public class LocalizacaoMapaActivity extends FragmentActivity implements OnMapReadyCallback {
 
     private GoogleMap mMap;
 
@@ -24,7 +24,7 @@ public class LocalizacaoMaps extends FragmentActivity implements OnMapReadyCallb
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.localizacao_maps);
+        setContentView(R.layout.activity_localizacao_mapa);
 
         Bundle parametros = getIntent().getExtras();
 
