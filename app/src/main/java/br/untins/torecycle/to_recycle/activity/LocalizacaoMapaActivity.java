@@ -17,8 +17,10 @@ public class LocalizacaoMapaActivity extends FragmentActivity implements OnMapRe
 
     private GoogleMap mMap;
 
-    Double latitude =null;
-    Double longitude = null;
+    //Double latitude =null;
+    //Double longitude = null;
+
+    LatLng location;
 
 
     @Override
@@ -30,8 +32,10 @@ public class LocalizacaoMapaActivity extends FragmentActivity implements OnMapRe
 
         if(parametros!=null)
         {
-            latitude = parametros.getDouble("latitude");
-            longitude = parametros.getDouble("longitude");
+            // Add as coordenadas a uma variavel de coordenadas
+            location = new LatLng(parametros.getDouble("latitude"),parametros.getDouble("longitude"));
+            //latitude = parametros.getDouble("latitude");
+            //longitude = parametros.getDouble("longitude");
 
         }
 
@@ -61,14 +65,14 @@ public class LocalizacaoMapaActivity extends FragmentActivity implements OnMapRe
 
 
         // Add as coordenadas a uma variavel de coordenadas
-        LatLng location = new LatLng(latitude, longitude);
+        //LatLng location = new LatLng(latitude, longitude);
 
         //marcador no mapa
         mMap.addMarker(new MarkerOptions().position(location).title("Local"));
 
 
         //posiciona o mapa na coordenada passada
-        CameraPosition cameraPosition = new CameraPosition.Builder().zoom(6).target(location).build();
+        CameraPosition cameraPosition = new CameraPosition.Builder().zoom(13).target(location).build();
         mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
 
         //CameraUpdate atualizaVisaoCamera = CameraUpdateFactory.newLatLngZoom(location, 6);

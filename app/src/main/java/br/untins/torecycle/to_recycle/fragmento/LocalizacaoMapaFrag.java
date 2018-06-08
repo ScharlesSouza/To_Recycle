@@ -53,6 +53,7 @@ public class LocalizacaoMapaFrag extends Fragment implements OnMapReadyCallback 
         MarkerOptions options = new MarkerOptions();
         options.position(local).title("Local");
         mMap.addMarker(options);
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(local));
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(local,13));
+
     }
 }

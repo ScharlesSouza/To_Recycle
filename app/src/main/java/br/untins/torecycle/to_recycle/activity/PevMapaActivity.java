@@ -115,11 +115,11 @@ public class PevMapaActivity extends FragmentActivity implements OnMapReadyCallb
         currentLocationMaker = mMap.addMarker(markerOptions);
 
         //Move to new location
-        CameraPosition cameraPosition = new CameraPosition.Builder().zoom(15).target(currentLocationLatLong).build();
+        CameraPosition cameraPosition = new CameraPosition.Builder().zoom(13).target(currentLocationLatLong).build();
         mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
 
         //instancia do objeto de localização com latitude e longitute - este objeto que sera salvo no Firebase
-        //LocationData locationData = new LocationData(location.getLatitude(), location.getLongitude());
+        //DescarteModel locationData = new DescarteModel(location.getLatitude(), location.getLongitude());
 
         //Criando o documento (tabela) "location" no Firebase - com chaves identificadoras pelo tempo de inserção
         //mDatabase.child("location").child(String.valueOf(new Date().getTime())).setValue(locationData);

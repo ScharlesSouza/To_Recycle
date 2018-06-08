@@ -35,14 +35,17 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import br.untins.torecycle.to_recycle.R;
 import br.untins.torecycle.to_recycle.activity.LocalizacaoMapaActivity;
-
+import br.untins.torecycle.to_recycle.modelo.DescarteModel;
 
 
 /**
@@ -53,25 +56,39 @@ public class CadastroDescarteFrag extends Fragment implements GoogleApiClient.Co
     Spinner spinnerMaterial;
     Button btnCadastro;
     EditText campoDescricao;
-    EditText campoLocalizacao;
-
-    TextView txtLatitude;
-    TextView txtLongitude;
-    TextView txtCidade;
-    TextView txtEstado;
-    TextView txtPais;
+    TextView txtLatitude, txtLongitude, txtCidade, txtEstado, txtPais;
 
     private Location location;
     private LocationManager locationManager;
     private Address endereco;
 
-    private double latitude = 0.0;
-    private double longitude = 0.0;
+
+    private double latitude;
+    private double longitude;
 
     private GoogleApiClient mGoogleApiClient;
     private DatabaseReference mDatabase;
 
+    /*###################################################################################################*/
+    //GET E SET DA LATITUDE
+    public double getLatitude() {
+        return latitude;
+    }
 
+    public void setLatitude(double latitude) {
+        this.latitude = latitude;
+    }
+
+    public double getLongitude() {
+        return longitude;
+    }
+
+    public void setLongitude(double longitude) {
+        this.longitude = longitude;
+    }
+    /*###################################################################################################*/
+
+    //CONSTRUTOR
     public CadastroDescarteFrag() {
         // Required empty public constructor
 
@@ -84,16 +101,14 @@ public class CadastroDescarteFrag extends Fragment implements GoogleApiClient.Co
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View viewFragment = inflater.inflate(R.layout.fragment_cadastro, null);
-        //mDatabase = FirebaseDatabase.getInstance().getReference();
-
+        mDatabase = FirebaseDatabase.getInstance().getReference();
 
 
         spinnerMaterial = (Spinner) viewFragment.findViewById(R.id.SpinnerMaterial);
         ArrayAdapter adapter = ArrayAdapter.createFromResource(getActivity().getApplicationContext(), R.array.ListaMaterial, android.R.layout.simple_spinner_item);
         spinnerMaterial.setAdapter(adapter);
 
-
-        campoDescricao = (EditText) getActivity().findViewById(R.id.descricaoCadastro);
+        campoDescricao = (EditText) viewFragment.findViewById(R.id.descricaoCadastro);
 
 
         //teste de localização
@@ -103,55 +118,19 @@ public class CadastroDescarteFrag extends Fragment implements GoogleApiClient.Co
         txtEstado = (TextView) getActivity().findViewById(R.id.textEstado);
         txtPais = (TextView) getActivity().findViewById(R.id.textPais);
 
+
+        //Metodo que verifica se o GPS ou WIFI esta habilitado e com permissão para pegar a localização, alem disso chama o metodo de atualização de localização
         startGettingLocations();
+
+        //UTILIZA A LOCATION_API PARA PEGAR A LOCALIZAÇÃO ATUAL DO DISPOSITIVO
         callConnection();
-
-/*
-
-        if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED){
-                //solicita a permissão ao usuario
-            locationManager = (LocationManager)getActivity().getSystemService(Context.LOCATION_SERVICE);
-            boolean GPSEnabled = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
-
-            if(!GPSEnabled){
-                startActivity(new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS));
-            }
-
-
-        }else{
-            locationManager = (LocationManager)getActivity().getSystemService(Context.LOCATION_SERVICE);
-            location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-
-        }
-
-        if(location != null){
-            latitude = location.getLatitude();
-            longitude = location.getLongitude();
-
-        }
-
-        txtLatitude.setText("Latitude "+ latitude);
-        txtLongitude.setText("Longitude "+ longitude);
-
-        try {
-            endereco = buscarEnderecoGPS(latitude, longitude);
-
-            txtCidade.setText("Cidade: "+ endereco.getLocality());
-            txtEstado.setText("Estado: "+endereco.getAdminArea());
-            txtPais.setText("País: "+endereco.getCountryName());
-
-        }catch (IOException e){
-            Log.i("GPS", e.getMessage());
-        }
-*/
 
 
         //chama o mapa com a localização atual do usuario
-        Button btnLocalizacao = (Button)viewFragment.findViewById(R.id.btnLocalizacao);
+        Button btnLocalizacao = (Button) viewFragment.findViewById(R.id.btnLocalizacao);
         btnLocalizacao.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 Bundle parametros = new Bundle();
 
                 //chama a proxima tela
@@ -160,17 +139,14 @@ public class CadastroDescarteFrag extends Fragment implements GoogleApiClient.Co
                 Intent intent = new Intent(contexto, LocalizacaoMapaActivity.class);
 
                 parametros.putDouble("latitude", latitude);
-                parametros.putDouble("logitude",longitude);
+                parametros.putDouble("longitude", longitude);
 
                 intent.putExtras(parametros);
 
-                //contexto.startActivity(intent);
-
-                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainer, new LocalizacaoMapaFrag()).commit();
-
+                contexto.startActivity(intent);
+                //getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainer, new LocalizacaoMapaFrag()).commit();
             }
         });
-
 
 
         // Chama a tela Cadastro Esvento
@@ -178,30 +154,30 @@ public class CadastroDescarteFrag extends Fragment implements GoogleApiClient.Co
         btnCadastrar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //EditText txtDescricao = (EditText) viewFragment.findViewById(R.id.descricaoCadastro);
-                //EditText txtLocalizacao = (EditText) viewFragment.findViewById(R.id.localizacaoCadastro);
+
+                //SQLiteDatabase db = getContext().openOrCreateDatabase("ToRecycle.db", Context.MODE_PRIVATE, null);
+                //ContentValues ctv = new ContentValues();
+                //ctv.put("descricao", campoDescricao.getText().toString());
+                //ctv.put("material", spinnerMaterial.getSelectedItem().toString());
+                //db.insert("doacoes", "id", ctv);
+
+                SimpleDateFormat formataData = new SimpleDateFormat("dd-MM-yyyy");
 
 
-                SQLiteDatabase db = getContext().openOrCreateDatabase("ToRecycle.db", Context.MODE_PRIVATE, null);
-                ContentValues ctv = new ContentValues();
-                ctv.put("descricao", campoDescricao.getText().toString());
-                ctv.put("localizacao", campoLocalizacao.getText().toString());
-                ctv.put("material", spinnerMaterial.getSelectedItem().toString());
+                DescarteModel descarte = new DescarteModel(latitude, longitude, campoDescricao.getText().toString(), formataData.format(new Date()));
+                mDatabase.child(endereco.getCountryName()).child(endereco.getAdminArea()).child(endereco.getLocality()).child(spinnerMaterial.getSelectedItem().toString())
+                        .child(String.valueOf(new Date())).setValue(descarte);
 
-                db.insert("doacoes", "id", ctv);
                 Toast.makeText(getContext(), " Cadastrado com Sucesso", Toast.LENGTH_SHORT).show();
             }
         });
 
+        //retorno da ViewCreate
         return viewFragment;
     }
 
 
-    public Boolean cadastraDoacao() {
-
-        return false;
-    }
-
+    //METODO QUE BUSCA ENDEREÇO NA API DO GOOGLE A PARTIR DE UMA LOCALIZAÇÃO (LATITUDE, LONGITUDE)
     public Address buscarEnderecoGPS(double lati, double longi) throws IOException {
         Geocoder geocoder;
         Address address = null;
@@ -215,98 +191,16 @@ public class CadastroDescarteFrag extends Fragment implements GoogleApiClient.Co
         return address;
     }
 
+    //METODO QUE UTILIZA O SYCRONIZED DO JAVA, PARA FAZER UMA CONEXÃO
     private synchronized void callConnection() {
         mGoogleApiClient = new GoogleApiClient.Builder(getActivity()).addOnConnectionFailedListener(this).addConnectionCallbacks(this).addApi(LocationServices.API).build();
         mGoogleApiClient.connect();
     }
 
-    //LISTENER
-    @Override
-    public void onConnected(Bundle bundle) {
-        Log.i("LOG", "onConnected(" + bundle + ")");
-
-        if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            // TODO: Consider calling
-            //    ActivityCompat#requestPermissions
-            // here to request the missing permissions, and then overriding
-            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-            //                                          int[] grantResults)
-            // to handle the case where the user grants the permission. See the documentation
-            // for ActivityCompat#requestPermissions for more details.
-            return;
-        }
-        Location local = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
-
-        txtLatitude = (TextView) getActivity().findViewById(R.id.textLatitude);
-        txtLongitude = (TextView) getActivity().findViewById(R.id.textLongitude);
-        if (local != null){
-            Log.i("LOG", "latitude: " + local.getLatitude());
-            Log.i("LOG", "longitude: "+ local.getLongitude());
-            txtLatitude.setText("Latitude: "+ local.getLatitude());
-            txtLongitude.setText("Longitude: "+ local.getLongitude());
-        }
-    }
-
-    @Override
-    public void onConnectionSuspended(int i) {
-        Log.i("LOG", "onConnectedSuspend("+i+")");
-    }
-
-    @Override
-    public void onConnectionFailed(ConnectionResult connectionResult) {
-
-    }
-
-
-    private ArrayList findUnAskedPermissions(ArrayList<String> wanted) {
-        ArrayList result = new ArrayList();
-
-        for (String perm : wanted) {
-            if (!hasPermission(perm)) {
-                result.add(perm);
-            }
-        }
-
-        return result;
-    }
-
-    private boolean hasPermission(String permission) {
-        if (canAskPermission()) {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                return (ActivityCompat.checkSelfPermission(getActivity(),permission) == PackageManager.PERMISSION_GRANTED);
-            }
-        }
-        return true;
-    }
-
-    private boolean canAskPermission() {
-        return (Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP_MR1);
-    }
-
-    public void showSettingsAlert() {
-        AlertDialog.Builder alertDialog = new AlertDialog.Builder(getActivity());
-        alertDialog.setTitle("GPS desativado!");
-        alertDialog.setMessage("Ativar GPS?");
-        alertDialog.setPositiveButton("Sim", new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int which) {
-                Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
-                startActivity(intent);
-            }
-        });
-
-        alertDialog.setNegativeButton("Não", new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.cancel();
-            }
-        });
-
-        alertDialog.show();
-    }
-
 
     private void startGettingLocations() {
 
-        LocationManager lm = (LocationManager)getActivity().getSystemService(Context.LOCATION_SERVICE);
+        LocationManager lm = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
 
         boolean isGPS = lm.isProviderEnabled(LocationManager.GPS_PROVIDER);
         boolean isNetwork = lm.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
@@ -328,7 +222,7 @@ public class CadastroDescarteFrag extends Fragment implements GoogleApiClient.Co
         } else {
             // check permissions
 
-            // check permissions for later versions
+            // checa permissçoes para dispositivos que utilize android acima da versão L (LOLLIPOP)
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 if (permissionsToRequest.size() > 0) {
                     requestPermissions(permissionsToRequest.toArray(new String[permissionsToRequest.size()]),
@@ -372,19 +266,154 @@ public class CadastroDescarteFrag extends Fragment implements GoogleApiClient.Co
     }
 
 
-    //implementação da classe LocationListener
+    private ArrayList findUnAskedPermissions(ArrayList<String> wanted) {
+        ArrayList result = new ArrayList();
 
+        for (String perm : wanted) {
+            if (!hasPermission(perm)) {
+                result.add(perm);
+            }
+        }
+
+        return result;
+    }
+
+    private boolean hasPermission(String permission) {
+        if (canAskPermission()) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                return (ActivityCompat.checkSelfPermission(getActivity(), permission) == PackageManager.PERMISSION_GRANTED);
+            }
+        }
+        return true;
+    }
+
+    private boolean canAskPermission() {
+        return (Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP_MR1);
+    }
+
+    public void showSettingsAlert() {
+        AlertDialog.Builder alertDialog = new AlertDialog.Builder(getActivity());
+        alertDialog.setTitle("GPS desativado!");
+        alertDialog.setMessage("Ativar GPS?");
+        alertDialog.setPositiveButton("Sim", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+                Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+                startActivity(intent);
+            }
+        });
+
+        alertDialog.setNegativeButton("Não", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+            }
+        });
+
+        alertDialog.show();
+    }
+
+
+    /*##################################################################################################################################################################################################*/
+    //SOBRECARGA DOS METODOS DO GOOGLE_API_CLIENT
     @Override
-    public void onLocationChanged(Location location) {
-        /*
+    public void onConnected(Bundle bundle) {
+        Log.i("LOG", "onConnected(" + bundle + ")");
+
+        if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            return;
+        }
+        Location local = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
+
         txtLatitude = (TextView) getActivity().findViewById(R.id.textLatitude);
         txtLongitude = (TextView) getActivity().findViewById(R.id.textLongitude);
-        if (location != null){
-           // txtLatitude.setText(String.valueOf(location.getLatitude()));
-           // txtLongitude.setText(String.valueOf(location.getLongitude()));
-        }
-        */
+        txtCidade = (TextView) getActivity().findViewById(R.id.textCidade);
+        txtEstado = (TextView) getActivity().findViewById(R.id.textEstado);
+        txtPais = (TextView) getActivity().findViewById(R.id.textPais);
 
+
+        if (local != null){
+
+            setLatitude(local.getLatitude());
+            setLongitude(local.getLongitude());
+
+            Log.i("LOG", "latitude: " + local.getLatitude());
+            Log.i("LOG", "longitude: "+ local.getLongitude());
+            txtLatitude.setText("Latitude: "+ local.getLatitude());
+            txtLongitude.setText("Longitude: "+ local.getLongitude());
+
+            try {
+                endereco = buscarEnderecoGPS(local.getLatitude(), local.getLongitude());
+
+                txtCidade.setText("Cidade: "+ endereco.getLocality());
+                txtEstado.setText("Estado: "+endereco.getAdminArea());
+                txtPais.setText("País: "+endereco.getCountryName());
+
+            }catch (IOException e){
+                Log.i("GPS", e.getMessage());
+            }
+
+        }
+
+    }
+
+    @Override
+    public void onConnectionSuspended(int i) {
+        Log.i("LOG", "onConnectedSuspend(" + i + ")");
+    }
+
+    @Override
+    public void onConnectionFailed(ConnectionResult connectionResult) {
+
+    }//FIM DOS METODOS DO GOOGLE_API_CLIENT
+
+
+    /*################################################################################################################*/
+    //SOBRECARGA DOS METODOS DA CLASSE LOCATIONLISTENER,PARA QUANDO A LOCALIZAÇÃO MUDAR
+    @Override
+    public void onLocationChanged(Location location) {
+        if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            return;
+        }
+        Location local = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
+
+        txtLatitude = (TextView) getActivity().findViewById(R.id.textLatitude);
+        txtLongitude = (TextView) getActivity().findViewById(R.id.textLongitude);
+        txtCidade = (TextView) getActivity().findViewById(R.id.textCidade);
+        txtEstado = (TextView) getActivity().findViewById(R.id.textEstado);
+        txtPais = (TextView) getActivity().findViewById(R.id.textPais);
+
+
+        if (local != null){
+            Log.i("LOG", "latitude: " + local.getLatitude());
+            Log.i("LOG", "longitude: "+ local.getLongitude());
+            txtLatitude.setText("Latitude: "+ local.getLatitude());
+            txtLongitude.setText("Longitude: "+ local.getLongitude());
+
+            try {
+                endereco = buscarEnderecoGPS(local.getLatitude(), local.getLongitude());
+
+                txtCidade.setText("Cidade: "+ endereco.getLocality());
+                txtEstado.setText("Estado: "+endereco.getAdminArea());
+                txtPais.setText("País: "+endereco.getCountryName());
+
+            }catch (IOException e){
+                Log.i("GPS", e.getMessage());
+            }
+
+        }
     }
 
     @Override
@@ -400,12 +429,14 @@ public class CadastroDescarteFrag extends Fragment implements GoogleApiClient.Co
     @Override
     public void onProviderDisabled(String provider) {
 
-    }
+    }//FIM DOS METODOS DA CLASSE LOCATIONLISTENER
+
+
 
 
 /*
 
-
+    //GRAVAR OS PONTOS DAS LOCALIZAÇÕES AO MUDAR DE POSIÇÃO
     @Override
     public void onLocationChanged(Location location) {
 
@@ -424,7 +455,7 @@ public class CadastroDescarteFrag extends Fragment implements GoogleApiClient.Co
         CameraPosition cameraPosition = new CameraPosition.Builder().zoom(15).target(currentLocationLatLong).build();
         mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
 
-        LocationData locationData = new LocationData(location.getLatitude(), location.getLongitude());
+        DescarteModel locationData = new DescarteModel(location.getLatitude(), location.getLongitude());
         mDatabase.child("location").child(String.valueOf(new Date().getTime())).setValue(locationData);
 
         Toast.makeText(this, "Localização atualizada", Toast.LENGTH_SHORT).show();
@@ -432,6 +463,7 @@ public class CadastroDescarteFrag extends Fragment implements GoogleApiClient.Co
 
     }
 
+    //METHODO PARA BUSCAR CADA PONTO GRAVADO NO BANCO DE DADOS
     private void getMarkers(){
 
         mDatabase.child("location").addListenerForSingleValueEvent(
@@ -450,9 +482,8 @@ public class CadastroDescarteFrag extends Fragment implements GoogleApiClient.Co
                 });
     }
 
+    //METODO COM todos OS PONTOS GRAVADOS NO BANCO DE DADOS
     private void getAllLocations(Map<String,Object> locations) {
-
-
 
 
         for (Map.Entry<String, Object> entry : locations.entrySet()){
