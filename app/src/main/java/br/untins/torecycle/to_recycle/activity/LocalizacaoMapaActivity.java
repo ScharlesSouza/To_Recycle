@@ -2,6 +2,7 @@ package br.untins.torecycle.to_recycle.activity;
 
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
+import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -20,7 +21,7 @@ public class LocalizacaoMapaActivity extends FragmentActivity implements OnMapRe
     //Double latitude =null;
     //Double longitude = null;
 
-    LatLng location;
+    LatLng localizacao;
 
 
     @Override
@@ -30,16 +31,14 @@ public class LocalizacaoMapaActivity extends FragmentActivity implements OnMapRe
 
         Bundle parametros = getIntent().getExtras();
 
+
+        //verifica se os parametros passados entre as telas são diferente de nullo
         if(parametros!=null)
         {
-            // Add as coordenadas a uma variavel de coordenadas
-            location = new LatLng(parametros.getDouble("latitude"),parametros.getDouble("longitude"));
-            //latitude = parametros.getDouble("latitude");
-            //longitude = parametros.getDouble("longitude");
+            // Add as coordenadas vinda da tela de cadastro a uma variavel de coordenadas
+            localizacao = new LatLng(parametros.getDouble("latitude"),parametros.getDouble("longitude"));
 
         }
-
-
 
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
@@ -63,19 +62,24 @@ public class LocalizacaoMapaActivity extends FragmentActivity implements OnMapRe
         //tipo de mapa
         mMap.setMapType(GoogleMap.MAP_TYPE_HYBRID);
 
+        LatLng local;
 
-        // Add as coordenadas a uma variavel de coordenadas
-        //LatLng location = new LatLng(latitude, longitude);
+        if(localizacao!=null){
+            local= localizacao;
+        }else{
+            local= new LatLng(11.5448729, 104.8921668);
+            Toast.makeText(this, " Localização deste dispositivo não encontrada", Toast.LENGTH_SHORT).show();
+        }
 
         //marcador no mapa
-        mMap.addMarker(new MarkerOptions().position(location).title("Local"));
+        mMap.addMarker(new MarkerOptions().position(local).title("Local"));
 
 
         //posiciona o mapa na coordenada passada
-        CameraPosition cameraPosition = new CameraPosition.Builder().zoom(13).target(location).build();
+        CameraPosition cameraPosition = new CameraPosition.Builder().zoom(13).target(local).build();
         mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
 
-        //CameraUpdate atualizaVisaoCamera = CameraUpdateFactory.newLatLngZoom(location, 6);
+        //CameraUpdate atualizaVisaoCamera = CameraUpdateFactory.newLatLngZoom(localizacao, 6);
         //mMap.moveCamera(atualizaVisaoCamera);
 
 

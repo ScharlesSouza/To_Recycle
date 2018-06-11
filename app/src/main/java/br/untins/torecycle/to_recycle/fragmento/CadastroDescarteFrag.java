@@ -62,7 +62,6 @@ public class CadastroDescarteFrag extends Fragment implements GoogleApiClient.Co
     private LocationManager locationManager;
     private Address endereco;
 
-
     private double latitude;
     private double longitude;
 
@@ -94,6 +93,17 @@ public class CadastroDescarteFrag extends Fragment implements GoogleApiClient.Co
 
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        //Metodo que verifica se o GPS ou WIFI esta habilitado e com permissão para pegar a localização, alem disso chama o metodo de atualização de localização
+        startGettingLocations();
+
+        //UTILIZA A LOCATION_API PARA PEGAR A LOCALIZAÇÃO ATUAL DO DISPOSITIVO
+        callConnection();
+
+    }
+
 
     @Nullable
     @Override
@@ -101,8 +111,9 @@ public class CadastroDescarteFrag extends Fragment implements GoogleApiClient.Co
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View viewFragment = inflater.inflate(R.layout.fragment_cadastro, null);
-        mDatabase = FirebaseDatabase.getInstance().getReference();
 
+        //instancia do banco de dados FireBase
+        mDatabase = FirebaseDatabase.getInstance().getReference();
 
         spinnerMaterial = (Spinner) viewFragment.findViewById(R.id.SpinnerMaterial);
         ArrayAdapter adapter = ArrayAdapter.createFromResource(getActivity().getApplicationContext(), R.array.ListaMaterial, android.R.layout.simple_spinner_item);
@@ -111,40 +122,33 @@ public class CadastroDescarteFrag extends Fragment implements GoogleApiClient.Co
         campoDescricao = (EditText) viewFragment.findViewById(R.id.descricaoCadastro);
 
 
-        //teste de localização
-        txtLatitude = (TextView) getActivity().findViewById(R.id.textLatitude);
-        txtLongitude = (TextView) getActivity().findViewById(R.id.textLongitude);
-        txtCidade = (TextView) getActivity().findViewById(R.id.textCidade);
-        txtEstado = (TextView) getActivity().findViewById(R.id.textEstado);
-        txtPais = (TextView) getActivity().findViewById(R.id.textPais);
-
-
-        //Metodo que verifica se o GPS ou WIFI esta habilitado e com permissão para pegar a localização, alem disso chama o metodo de atualização de localização
-        startGettingLocations();
-
-        //UTILIZA A LOCATION_API PARA PEGAR A LOCALIZAÇÃO ATUAL DO DISPOSITIVO
-        callConnection();
-
-
-        //chama o mapa com a localização atual do usuario
+       //chama o mapa com a localização atual do usuario
         Button btnLocalizacao = (Button) viewFragment.findViewById(R.id.btnLocalizacao);
         btnLocalizacao.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Bundle parametros = new Bundle();
 
-                //chama a proxima tela
+                //define uma active para ser chamada futuramente
                 Context contexto = null;
                 contexto = getContext();
                 Intent intent = new Intent(contexto, LocalizacaoMapaActivity.class);
 
+                //defini um fragmento a ser chamado futuramente
+                LocalizacaoMapaFrag proximoFrag = new LocalizacaoMapaFrag();
+
+                //carrega os parametros (latitude e longitude) a ser enviado para o mapa.
                 parametros.putDouble("latitude", latitude);
                 parametros.putDouble("longitude", longitude);
 
+                //lança os parametros carregado a activity e tambem ao fragmento que poderar ser chamado.
                 intent.putExtras(parametros);
+                proximoFrag.setArguments(parametros);
 
+
+                //chamada da proxima tela que contem o mapa com a localização atual do dispositivo
                 contexto.startActivity(intent);
-                //getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainer, new LocalizacaoMapaFrag()).commit();
+                //getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainer, proximoFrag).commit();
             }
         });
 
@@ -155,17 +159,20 @@ public class CadastroDescarteFrag extends Fragment implements GoogleApiClient.Co
             @Override
             public void onClick(View v) {
 
+                //string de gravação em banco de dados SQLite
                 //SQLiteDatabase db = getContext().openOrCreateDatabase("ToRecycle.db", Context.MODE_PRIVATE, null);
                 //ContentValues ctv = new ContentValues();
                 //ctv.put("descricao", campoDescricao.getText().toString());
                 //ctv.put("material", spinnerMaterial.getSelectedItem().toString());
                 //db.insert("doacoes", "id", ctv);
 
+                //fortação da data
                 SimpleDateFormat formataData = new SimpleDateFormat("dd-MM-yyyy");
 
-
-                DescarteModel descarte = new DescarteModel(latitude, longitude, campoDescricao.getText().toString(), formataData.format(new Date()));
-                mDatabase.child(endereco.getCountryName()).child(endereco.getAdminArea()).child(endereco.getLocality()).child(spinnerMaterial.getSelectedItem().toString())
+                //estanciandoum objeto de descarte, que sera gravado no banco.
+                DescarteModel descarte = new DescarteModel(latitude, longitude, spinnerMaterial.getSelectedItem().toString(), campoDescricao.getText().toString(), formataData.format(new Date()));
+                //gravacao no banco FireBase
+                mDatabase.child(endereco.getCountryName()).child(endereco.getAdminArea()).child(endereco.getLocality()).child("Descarte").child(spinnerMaterial.getSelectedItem().toString())
                         .child(String.valueOf(new Date())).setValue(descarte);
 
                 Toast.makeText(getContext(), " Cadastrado com Sucesso", Toast.LENGTH_SHORT).show();
@@ -330,11 +337,11 @@ public class CadastroDescarteFrag extends Fragment implements GoogleApiClient.Co
         }
         Location local = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
 
-        txtLatitude = (TextView) getActivity().findViewById(R.id.textLatitude);
-        txtLongitude = (TextView) getActivity().findViewById(R.id.textLongitude);
-        txtCidade = (TextView) getActivity().findViewById(R.id.textCidade);
-        txtEstado = (TextView) getActivity().findViewById(R.id.textEstado);
-        txtPais = (TextView) getActivity().findViewById(R.id.textPais);
+        //txtLatitude = (TextView) getActivity().findViewById(R.id.textLatitude);
+        //txtLongitude = (TextView) getActivity().findViewById(R.id.textLongitude);
+        //txtCidade = (TextView) getActivity().findViewById(R.id.textCidade);
+        //txtEstado = (TextView) getActivity().findViewById(R.id.textEstado);
+        //txtPais = (TextView) getActivity().findViewById(R.id.textPais);
 
 
         if (local != null){
@@ -342,17 +349,17 @@ public class CadastroDescarteFrag extends Fragment implements GoogleApiClient.Co
             setLatitude(local.getLatitude());
             setLongitude(local.getLongitude());
 
-            Log.i("LOG", "latitude: " + local.getLatitude());
-            Log.i("LOG", "longitude: "+ local.getLongitude());
-            txtLatitude.setText("Latitude: "+ local.getLatitude());
-            txtLongitude.setText("Longitude: "+ local.getLongitude());
+            //Log.i("LOG", "latitude: " + local.getLatitude());
+            //Log.i("LOG", "longitude: "+ local.getLongitude());
+            //txtLatitude.setText("Latitude: "+ local.getLatitude());
+            //txtLongitude.setText("Longitude: "+ local.getLongitude());
 
             try {
                 endereco = buscarEnderecoGPS(local.getLatitude(), local.getLongitude());
 
-                txtCidade.setText("Cidade: "+ endereco.getLocality());
-                txtEstado.setText("Estado: "+endereco.getAdminArea());
-                txtPais.setText("País: "+endereco.getCountryName());
+                //txtCidade.setText("Cidade: "+ endereco.getLocality());
+                //txtEstado.setText("Estado: "+endereco.getAdminArea());
+                //txtPais.setText("País: "+endereco.getCountryName());
 
             }catch (IOException e){
                 Log.i("GPS", e.getMessage());
@@ -389,30 +396,12 @@ public class CadastroDescarteFrag extends Fragment implements GoogleApiClient.Co
         }
         Location local = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
 
-        txtLatitude = (TextView) getActivity().findViewById(R.id.textLatitude);
-        txtLongitude = (TextView) getActivity().findViewById(R.id.textLongitude);
-        txtCidade = (TextView) getActivity().findViewById(R.id.textCidade);
-        txtEstado = (TextView) getActivity().findViewById(R.id.textEstado);
-        txtPais = (TextView) getActivity().findViewById(R.id.textPais);
-
-
         if (local != null){
-            Log.i("LOG", "latitude: " + local.getLatitude());
-            Log.i("LOG", "longitude: "+ local.getLongitude());
-            txtLatitude.setText("Latitude: "+ local.getLatitude());
-            txtLongitude.setText("Longitude: "+ local.getLongitude());
-
             try {
                 endereco = buscarEnderecoGPS(local.getLatitude(), local.getLongitude());
-
-                txtCidade.setText("Cidade: "+ endereco.getLocality());
-                txtEstado.setText("Estado: "+endereco.getAdminArea());
-                txtPais.setText("País: "+endereco.getCountryName());
-
             }catch (IOException e){
                 Log.i("GPS", e.getMessage());
             }
-
         }
     }
 

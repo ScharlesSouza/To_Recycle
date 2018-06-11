@@ -95,7 +95,7 @@
             app:layout_constraintHorizontal_bias="0.47"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/btnLocalizacao" />
-
+<!--
         <TextView
             android:id="@+id/textCidade"
             android:layout_width="wrap_content"
@@ -150,7 +150,7 @@
             android:text="Longitude"
             app:layout_constraintBottom_toTopOf="@+id/textEstado"
             app:layout_constraintStart_toEndOf="@+id/textLatitude" />
-
+-->
 
     </android.support.constraint.ConstraintLayout>
 

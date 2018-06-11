@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.Fragment;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -15,13 +16,19 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import java.util.List;
+
 import br.untins.torecycle.to_recycle.R;
 import br.untins.torecycle.to_recycle.fragmento.CadastroDescarteFrag;
+import br.untins.torecycle.to_recycle.fragmento.ListaDescarteFrag;
 import br.untins.torecycle.to_recycle.fragmento.ListaResiduosFrag;
 import br.untins.torecycle.to_recycle.fragmento.PevMapaFrag;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
+
+    android.support.v4.app.FragmentManager fragMgr;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,8 +57,10 @@ public class MainActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
+
+        fragMgr = this.getSupportFragmentManager();
         //carrega o framento na view que recebera os containers
-        getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainer, new ListaResiduosFrag()).commit();
+        fragMgr.beginTransaction().replace(R.id.fragmentContainer, new ListaResiduosFrag(), "ListaResiduo").commit();
 
     }
 
@@ -99,29 +108,35 @@ public class MainActivity extends AppCompatActivity
 
         if (id == R.id.nav_sobre) {
             //carrega o framento na view que recebera os containers
-            getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainer, new br.untins.torecycle.to_recycle.fragmento.SobreFrag()).commit();
-        } else if (id == R.id.nav_orgaos) {
-            // Handle the camera action
-        } else if (id == R.id.nav_leis) {
-            // Handle the camera action
-        } else if (id == R.id.nav_loja) {
-            // Handle the camera action
-        } else if (id == R.id.nav_parceiros) {
-            // Handle the camera action
-        } else if (id == R.id.nav_catadores) {
-            getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainer, new PevMapaFrag()).commit();
-            // Handle the camera action
-        } else if (id == R.id.nav_descarte) {
+            getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainer, new br.untins.torecycle.to_recycle.fragmento.SobreFrag(), "Sobre").commit();
+
+        } else if (id == R.id.nav_reciclaveis) {
             //carrega o framento na view que recebera os containers
-            getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainer, new CadastroDescarteFrag()).commit();
+            getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainer, new ListaResiduosFrag(), "ListaResiduo").commit();
+
         } else if (id == R.id.nav_Locais) {
             // Handle the camera action
             Context contexto = this;
             Intent intent = new Intent(contexto, PevMapaActivity.class);
             contexto.startActivity(intent);
-        } else if (id == R.id.nav_reciclaveis) {
+
+        } else if (id == R.id.nav_descarte) {
             //carrega o framento na view que recebera os containers
-            getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainer, new ListaResiduosFrag()).commit();
+            getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainer, new CadastroDescarteFrag(), "CadastroDescarte").commit();
+
+        } else if (id == R.id.nav_catadores) {
+            getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainer, new PevMapaFrag(), "PevMapa").commit();
+            // Handle the camera action
+        } else if (id == R.id.nav_orgaos) {
+            // Handle the camera action
+        } else if (id == R.id.nav_parceiros) {
+            //carrega o framento na view que recebera os containers
+            getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainer, new ListaDescarteFrag(),"ListaDescarte").commit();
+        } else if (id == R.id.nav_loja) {
+            // Handle the camera action
+        } else if (id == R.id.nav_leis) {
+            // Handle the camera action
+
 
         } else if (id == R.id.nav_camera) {
             // Handle the camera action
@@ -140,5 +155,23 @@ public class MainActivity extends AppCompatActivity
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+
+
+    public String pegaFragmentoAtual(){
+        List<android.support.v4.app.Fragment> fragments = fragMgr.getFragments();
+        Fragment visibleFragment = fragments.get(0);
+        switch (visibleFragment.getTag()){
+            case "Tag1":
+
+                break;
+            case "Tag2":
+
+                break;
+
+        }
+        return "vazio";
+
     }
 }

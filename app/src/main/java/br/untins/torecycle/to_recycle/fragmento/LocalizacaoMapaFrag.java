@@ -8,6 +8,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -25,7 +26,9 @@ import br.untins.torecycle.to_recycle.R;
 public class LocalizacaoMapaFrag extends Fragment implements OnMapReadyCallback {
 
     private GoogleMap mMap;
+    LatLng localizacao;
 
+    //CONSTRUTOR DA CLASSE
     public LocalizacaoMapaFrag() {
         // Required empty public constructor
     }
@@ -35,7 +38,17 @@ public class LocalizacaoMapaFrag extends Fragment implements OnMapReadyCallback 
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_localizacao_mapa, container, false);
+        View view =  inflater.inflate(R.layout.fragment_localizacao_mapa, container, false);
+
+        Bundle parametros;
+        parametros = getArguments();
+        if(parametros!=null)
+        {
+            // Add as coordenadas a uma variavel de coordenadas
+            localizacao = new LatLng(parametros.getDouble("latitude"),parametros.getDouble("longitude"));
+
+        }
+        return view;
     }
 
     @Override
@@ -49,7 +62,15 @@ public class LocalizacaoMapaFrag extends Fragment implements OnMapReadyCallback 
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
-        LatLng local= new LatLng(11.5448729, 104.8921668);
+        LatLng local;
+
+        if(localizacao!=null){
+            local= localizacao;
+        }else{
+            local= new LatLng(11.5448729, 104.8921668);
+            Toast.makeText(getContext(), " Localização deste dispositivo não encontrada", Toast.LENGTH_SHORT).show();
+        }
+
         MarkerOptions options = new MarkerOptions();
         options.position(local).title("Local");
         mMap.addMarker(options);

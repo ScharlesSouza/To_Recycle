@@ -114,15 +114,15 @@ public class PevMapaActivity extends FragmentActivity implements OnMapReadyCallb
         markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE));
         currentLocationMaker = mMap.addMarker(markerOptions);
 
-        //Move to new location
+        //Move to new localizacao
         CameraPosition cameraPosition = new CameraPosition.Builder().zoom(13).target(currentLocationLatLong).build();
         mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
 
         //instancia do objeto de localização com latitude e longitute - este objeto que sera salvo no Firebase
-        //DescarteModel locationData = new DescarteModel(location.getLatitude(), location.getLongitude());
+        //DescarteModel locationData = new DescarteModel(localizacao.getLatitude(), localizacao.getLongitude());
 
-        //Criando o documento (tabela) "location" no Firebase - com chaves identificadoras pelo tempo de inserção
-        //mDatabase.child("location").child(String.valueOf(new Date().getTime())).setValue(locationData);
+        //Criando o documento (tabela) "localizacao" no Firebase - com chaves identificadoras pelo tempo de inserção
+        //mDatabase.child("localizacao").child(String.valueOf(new Date().getTime())).setValue(locationData);
 
         Toast.makeText(this, "Localização atualizada", Toast.LENGTH_SHORT).show();
 
@@ -224,7 +224,7 @@ public class PevMapaActivity extends FragmentActivity implements OnMapReadyCallb
             return;
         }
 
-        //Starts requesting location updates
+        //Starts requesting localizacao updates
         if (canGetLocation) {
             if (isGPS) {
                 lm.requestLocationUpdates(
@@ -246,10 +246,10 @@ public class PevMapaActivity extends FragmentActivity implements OnMapReadyCallb
         }
     }
 
-    //metodo que acessa ao documento(tabela) "location" no banco firebase e tras todas as linhas
+    //metodo que acessa ao documento(tabela) "localizacao" no banco firebase e tras todas as linhas
     private void getMarkers(){
 
-        mDatabase.child("location").addListenerForSingleValueEvent(
+        mDatabase.child("localizacao").addListenerForSingleValueEvent(
                 new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {

@@ -21,7 +21,7 @@ import java.util.ArrayList;
 
 import br.untins.torecycle.to_recycle.R;
 import br.untins.torecycle.to_recycle.activity.DetailsActivity;
-import br.untins.torecycle.to_recycle.modelo.ItemHolder;
+import br.untins.torecycle.to_recycle.modelo.ItemResiduo;
 import br.untins.torecycle.to_recycle.modelo.TipoResiduo;
 
 
@@ -78,7 +78,7 @@ public class ListaResiduosFrag extends Fragment {
         lista.setItemAnimator(new DefaultItemAnimator());
         lista.setHasFixedSize(true);
 
-        Adaptador adapt = new Adaptador(getActivity(), dataSource);
+        AdaptadorResiduos adapt = new AdaptadorResiduos(getActivity(), dataSource);
         adapt.notifyDataSetChanged();
         lista.setAdapter(adapt);
 
@@ -169,7 +169,7 @@ public class ListaResiduosFrag extends Fragment {
                 listaRecycleView.setHasFixedSize(true);
 
 
-                Adaptador adapt = new Adaptador(meuContexto, materialLixo);
+                AdaptadorDescarte adapt = new AdaptadorDescarte(meuContexto, materialLixo);
                 listaRecycleView.setAdapter(adapt);
 
 
@@ -180,13 +180,13 @@ public class ListaResiduosFrag extends Fragment {
 
         */
 
-    public class Adaptador extends RecyclerView.Adapter<ItemHolder>{
+    public class AdaptadorResiduos extends RecyclerView.Adapter<ItemResiduo>{
 
         Context contexto = null;
         ArrayList<TipoResiduo> lista = null;
         private AlertDialog alerta;
 
-        public Adaptador(Context contexto, ArrayList<TipoResiduo> lista){
+        public AdaptadorResiduos(Context contexto, ArrayList<TipoResiduo> lista){
 
             this.contexto = contexto;
             this.lista = lista;
@@ -196,9 +196,9 @@ public class ListaResiduosFrag extends Fragment {
         /* Método que deverá retornar layout criado pelo ViewHolder já inflado em uma view. */
         //@NonNull
         @Override
-        public ItemHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-            View celula = LayoutInflater.from(contexto).inflate(R.layout.layout_lixo_item_lista, parent,false );
-            ItemHolder item = new ItemHolder(celula);
+        public ItemResiduo onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+            View celula = LayoutInflater.from(contexto).inflate(R.layout.item_residuo, parent,false );
+            ItemResiduo item = new ItemResiduo(celula);
             return item;
         }
         /*
@@ -207,12 +207,12 @@ public class ListaResiduosFrag extends Fragment {
          * É onde a mágica acontece!
          * */
         @Override
-        public void onBindViewHolder(@NonNull ItemHolder holder, final int position) {
+        public void onBindViewHolder(@NonNull ItemResiduo holder, final int position) {
             TipoResiduo item = lista.get(position);
 
             holder.getTextoMaterial().setText(item.getMaterial());
 
-            holder.getTextoMaterial().setOnClickListener(new View.OnClickListener(){
+            holder.itemView.setOnClickListener(new View.OnClickListener(){
 
                 @Override
                 public void onClick(View view) {
@@ -232,7 +232,7 @@ public class ListaResiduosFrag extends Fragment {
             });
 
 
-            holder.getTextoMaterial().setOnLongClickListener(new View.OnLongClickListener() {
+            holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
                 @Override
                 public boolean onLongClick(View view) {
                     AlertDialog.Builder builder = new AlertDialog.Builder(contexto);

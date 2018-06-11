@@ -56,7 +56,7 @@ public class PevMapaFrag extends Fragment implements OnMapReadyCallback, Locatio
     private DatabaseReference mDatabase;
 
 
-
+    //CONSTRUTOR
     public PevMapaFrag() {
         // Required empty public constructor
     }
@@ -76,6 +76,7 @@ public class PevMapaFrag extends Fragment implements OnMapReadyCallback, Locatio
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
         SupportMapFragment mapFragment = (SupportMapFragment)getChildFragmentManager().findFragmentById(R.id.mapaPEV);
         mapFragment.getMapAsync(this);
 
@@ -84,19 +85,24 @@ public class PevMapaFrag extends Fragment implements OnMapReadyCallback, Locatio
         //instancia do Firebase na minha aplicação
         mDatabase = FirebaseDatabase.getInstance().getReference();
 
-        //pega todas as localizações contidas no dumento Firebase
+        //pega todas as localizações contidas no documento Firebase
         getMarkers();
-
     }
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
-        LatLng local= new LatLng(11.5448729, 104.8921668);
+        LatLng local;
+        if(currentLocationLatLong!=null){
+            local= currentLocationLatLong;
+        }else{
+            local= new LatLng(11.5448729, 104.8921668);
+        }
+
         MarkerOptions options = new MarkerOptions();
         options.position(local).title("Local");
         mMap.addMarker(options);
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(local));
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(local,13));
 
 
 

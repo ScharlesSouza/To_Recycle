@@ -12,6 +12,9 @@
         <item>Metal</item>
         <item>Vidro</item>
         <item>Organico</item>
+        <item>Eletrônico</item>
+        <item>Roupa</item>
+        <item>Outros</item>
     </string-array>
     <string name="title_activity_maps">Mapa</string>
 
