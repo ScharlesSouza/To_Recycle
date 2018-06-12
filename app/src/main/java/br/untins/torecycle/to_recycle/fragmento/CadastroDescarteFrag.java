@@ -9,6 +9,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -27,6 +28,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.content.FileProvider;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -46,6 +48,7 @@ import com.google.android.gms.location.LocationServices;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
@@ -53,6 +56,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import br.untins.torecycle.to_recycle.BuildConfig;
 import br.untins.torecycle.to_recycle.R;
 import br.untins.torecycle.to_recycle.activity.LocalizacaoMapaActivity;
 import br.untins.torecycle.to_recycle.modelo.DescarteModel;
@@ -201,6 +205,7 @@ public class CadastroDescarteFrag extends Fragment implements GoogleApiClient.Co
                         .child(String.valueOf(new Date())).setValue(descarte);
 
                 Toast.makeText(getContext(), " Cadastrado com Sucesso", Toast.LENGTH_SHORT).show();
+
             }
         });
 
@@ -244,8 +249,8 @@ public class CadastroDescarteFrag extends Fragment implements GoogleApiClient.Co
         ArrayList<String> permissions = new ArrayList<>();
         ArrayList<String> permissionsToRequest;
 
-        permissions.add(android.Manifest.permission.ACCESS_FINE_LOCATION);
-        permissions.add(android.Manifest.permission.ACCESS_COARSE_LOCATION);
+        permissions.add(Manifest.permission.ACCESS_FINE_LOCATION);
+        permissions.add(Manifest.permission.ACCESS_COARSE_LOCATION);
         permissionsToRequest = findUnAskedPermissions(permissions);
 
         //Check if GPS and Network are on, if not asks the user to turn on
@@ -267,8 +272,8 @@ public class CadastroDescarteFrag extends Fragment implements GoogleApiClient.Co
 
         //Checks if FINE LOCATION and COARSE Location were granted
         if (ActivityCompat.checkSelfPermission(getActivity(),
-                android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
-                ActivityCompat.checkSelfPermission(getActivity(), android.Manifest.permission.ACCESS_COARSE_LOCATION)
+                Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
+                ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION)
                         != PackageManager.PERMISSION_GRANTED) {
 
             Toast.makeText(getActivity(), "Permissão negada", Toast.LENGTH_SHORT).show();
@@ -362,29 +367,13 @@ public class CadastroDescarteFrag extends Fragment implements GoogleApiClient.Co
         }
         Location local = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
 
-        //txtLatitude = (TextView) getActivity().findViewById(R.id.textLatitude);
-        //txtLongitude = (TextView) getActivity().findViewById(R.id.textLongitude);
-        //txtCidade = (TextView) getActivity().findViewById(R.id.textCidade);
-        //txtEstado = (TextView) getActivity().findViewById(R.id.textEstado);
-        //txtPais = (TextView) getActivity().findViewById(R.id.textPais);
-
-
         if (local != null){
 
             setLatitude(local.getLatitude());
             setLongitude(local.getLongitude());
 
-            //Log.i("LOG", "latitude: " + local.getLatitude());
-            //Log.i("LOG", "longitude: "+ local.getLongitude());
-            //txtLatitude.setText("Latitude: "+ local.getLatitude());
-            //txtLongitude.setText("Longitude: "+ local.getLongitude());
-
             try {
                 endereco = buscarEnderecoGPS(local.getLatitude(), local.getLongitude());
-
-                //txtCidade.setText("Cidade: "+ endereco.getLocality());
-                //txtEstado.setText("Estado: "+endereco.getAdminArea());
-                //txtPais.setText("País: "+endereco.getCountryName());
 
             }catch (IOException e){
                 Log.i("GPS", e.getMessage());
@@ -444,44 +433,6 @@ public class CadastroDescarteFrag extends Fragment implements GoogleApiClient.Co
     public void onProviderDisabled(String provider) {
 
     }//FIM DOS METODOS DA CLASSE LOCATIONLISTENER
-
-
-
-    public void takePhoto() {
-        Intent intent = new Intent("android.media.action.IMAGE_CAPTURE");
-        File photo = new File(Environment.getExternalStorageDirectory(),  "Pic.jpg");
-        intent.putExtra(MediaStore.EXTRA_OUTPUT,  Uri.fromFile(photo));
-        imageUri = Uri.fromFile(photo);
-        getActivity().startActivityForResult(intent, 100);
-    }
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        switch (requestCode) {
-            case 100:
-                if (resultCode == Activity.RESULT_OK) {
-                    Uri selectedImage = imageUri;
-                    getActivity().getContentResolver().notifyChange(selectedImage, null);
-                    ContentResolver cr = getActivity().getContentResolver();
-                    Bitmap bitmap;
-                    try {
-                        bitmap = android.provider.MediaStore.Images.Media
-                                .getBitmap(cr, selectedImage);
-
-                        campoFoto.setImageBitmap(bitmap);
-                        Toast.makeText(getActivity(), selectedImage.toString(),
-                                Toast.LENGTH_LONG).show();
-                    } catch (Exception e) {
-                        Toast.makeText(getActivity(), "Failed to load", Toast.LENGTH_SHORT)
-                                .show();
-                        Log.e("Camera", e.toString());
-                    }
-                }
-        }
-    }
-
-
 
 
 
@@ -557,6 +508,99 @@ public class CadastroDescarteFrag extends Fragment implements GoogleApiClient.Co
         markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN));
         mMap.addMarker(markerOptions);
     }
-
 */
+
+    public void takePhoto() {
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+
+        builder.setTitle("Choose Image Source");
+        builder.setItems(new CharSequence[]{"Gallery", "Camera"}, new DialogInterface.OnClickListener() {
+
+            public void onClick(DialogInterface dialog, int which) {
+                switch (which) {
+                    case 0:
+
+                        Intent intent = new Intent(
+                                Intent.ACTION_GET_CONTENT);
+                        intent.setType("image/*");
+
+                        Intent chooser = Intent.createChooser(intent, "Choose a Picture");
+                        startActivityForResult(chooser, 0);
+
+                        break;
+
+                    case 1:
+
+                        Intent intentTirarFoto = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                        caminhoFoto = getContext().getExternalFilesDir(null) + "/" + System.currentTimeMillis() + ".jpg";
+                        File foto = new File(caminhoFoto);
+                        imageUri = FileProvider.getUriForFile(getContext(), BuildConfig.APPLICATION_ID + ".provider", foto);
+                        intentTirarFoto.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
+                        startActivityForResult(intentTirarFoto,1);
+
+                        break;
+
+                }
+            }
+
+        });
+
+        builder.show();
+    }
+
+
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (resultCode == Activity.RESULT_OK) {
+
+            switch (requestCode) {
+                case 0:
+
+
+                    Uri selectedImageUri = data.getData();
+
+                    try {
+                        Uri selectedImage = selectedImageUri;
+                        //getContentResolver().notifyChange(selectedImage, null);
+                        ContentResolver cr = getActivity().getContentResolver();
+
+                        Bitmap bitmap;
+                        bitmap = MediaStore.Images.Media
+                                .getBitmap(cr, selectedImage);
+                        campoFoto.setImageBitmap(bitmap);
+
+                    } catch (Exception e) {
+                        Toast.makeText(getActivity(), "Failed to load", Toast.LENGTH_SHORT)
+                                .show();
+                        Log.e("Camera", e.toString());
+                    }
+
+
+                    break;
+
+                case 1:
+                    super.onActivityResult(requestCode, resultCode, data);
+                    if (resultCode == Activity.RESULT_OK) {
+                        Uri selectedImage = imageUri;
+                        getActivity().getContentResolver().notifyChange(selectedImage, null);
+                        ContentResolver cr = getActivity().getContentResolver();
+                        Bitmap bitmap;
+                        try {
+                            bitmap = MediaStore.Images.Media
+                                    .getBitmap(cr, selectedImage);
+
+                            campoFoto.setImageBitmap(bitmap);
+                            Toast.makeText(getActivity(), selectedImage.toString(),
+                                    Toast.LENGTH_LONG).show();
+                        } catch (Exception e) {
+                            Toast.makeText(getActivity(), "Failed to load", Toast.LENGTH_SHORT)
+                                    .show();
+                            Log.e("Camera", e.toString());
+                        }
+                    }
+                    break;
+            }
+        }
+    }
+
 }

@@ -37,7 +37,9 @@ public class MainActivity extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        /*
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+
 
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -46,6 +48,7 @@ public class MainActivity extends AppCompatActivity
                         .setAction("Action", null).show();
             }
         });
+           */
 
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -53,10 +56,8 @@ public class MainActivity extends AppCompatActivity
         drawer.addDrawerListener(toggle);
         toggle.syncState();
 
-
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
-
 
         fragMgr = this.getSupportFragmentManager();
         //carrega o framento na view que recebera os containers
@@ -66,7 +67,6 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void onBackPressed() {
-
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
 
         if (drawer.isDrawerOpen(GravityCompat.START)) {
@@ -74,8 +74,17 @@ public class MainActivity extends AppCompatActivity
         } else {
             super.onBackPressed();
         }
-
         super.onBackPressed();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
     }
 
     @Override
@@ -96,7 +105,6 @@ public class MainActivity extends AppCompatActivity
         if (id == R.id.action_settings) {
             return true;
         }
-
         return super.onOptionsItemSelected(item);
     }
 
@@ -107,39 +115,41 @@ public class MainActivity extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.nav_sobre) {
-            //carrega o framento na view que recebera os containers
+            //Fragmento Sobre o aplicativo
             getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainer, new br.untins.torecycle.to_recycle.fragmento.SobreFrag(), "Sobre").commit();
-
         } else if (id == R.id.nav_reciclaveis) {
-            //carrega o framento na view que recebera os containers
+            //Lista dos tipos de residuos
             getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainer, new ListaResiduosFrag(), "ListaResiduo").commit();
-
         } else if (id == R.id.nav_Locais) {
-            // Handle the camera action
+            //mapa dos pontos (locais) de entrega voluntaria - Activity
             Context contexto = this;
             Intent intent = new Intent(contexto, PevMapaActivity.class);
             contexto.startActivity(intent);
 
+            //mapa dos pontos (locais) de entrega voluntaria -Fragmento
+            //getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainer, new PevMapaFrag(), "PevMapa").commit();
+
         } else if (id == R.id.nav_descarte) {
-            //carrega o framento na view que recebera os containers
-            getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainer, new CadastroDescarteFrag(), "CadastroDescarte").commit();
+            //Lista dos descartes do usuarios do app
+            getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainer, new ListaDescarteFrag(),"ListaDescarte").commit();
+            //Cadastro de descarte
+            //getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainer, new CadastroDescarteFrag(), "CadastroDescarte").commit();
 
         } else if (id == R.id.nav_catadores) {
-            getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainer, new PevMapaFrag(), "PevMapa").commit();
-            // Handle the camera action
+
         } else if (id == R.id.nav_orgaos) {
-            // Handle the camera action
+
         } else if (id == R.id.nav_parceiros) {
-            //carrega o framento na view que recebera os containers
-            getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainer, new ListaDescarteFrag(),"ListaDescarte").commit();
+
         } else if (id == R.id.nav_loja) {
-            // Handle the camera action
+
         } else if (id == R.id.nav_leis) {
-            // Handle the camera action
 
+        }
 
-        } else if (id == R.id.nav_camera) {
-            // Handle the camera action
+    /*
+        else if (id == R.id.nav_camera) {
+
         } else if (id == R.id.nav_galeria) {
 
         } else if (id == R.id.nav_slideshow) {
@@ -151,7 +161,7 @@ public class MainActivity extends AppCompatActivity
         } else if (id == R.id.nav_send) {
 
         }
-
+    */
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;

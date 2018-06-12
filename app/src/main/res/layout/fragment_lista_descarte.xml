@@ -5,6 +5,7 @@
     android:layout_height="match_parent"
     tools:context=".fragmento.ListaDescarteFrag">
 
+
     <!-- TODO: Update blank fragment layout -->
 
     <android.support.v7.widget.RecyclerView
@@ -12,5 +13,17 @@
         android:scrollbars="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/descarte_flutuante"
+        android:layout_width="56dp"
+        android:layout_height="56dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="32dp"
+        android:clickable="true"
+        android:onClick="chamaCadastro"
+        android:src="@android:drawable/ic_menu_add"
+        android:backgroundTint="@color/colorAccent" />
 
 </FrameLayout>

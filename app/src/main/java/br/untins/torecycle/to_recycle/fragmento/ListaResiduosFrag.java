@@ -3,6 +3,8 @@ package br.untins.torecycle.to_recycle.fragmento;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -17,6 +19,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.squareup.picasso.Picasso;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.ArrayList;
 
 import br.untins.torecycle.to_recycle.R;
@@ -61,16 +69,26 @@ public class ListaResiduosFrag extends Fragment {
 
         //Adicionando fixamente os itens, exemplo
 
-        dataSource.add(new TipoResiduo("Papel"));
-        dataSource.add(new TipoResiduo("Plástico"));
-        dataSource.add(new TipoResiduo("Metal"));
-        dataSource.add(new TipoResiduo("Vidro"));
-        dataSource.add(new TipoResiduo("Orgânico"));
-        dataSource.add(new TipoResiduo("Lixo não Reciclável"));
-        dataSource.add(new TipoResiduo("Eletronico"));
-        dataSource.add(new TipoResiduo("Hospitalar"));
-        dataSource.add(new TipoResiduo("Entulho"));
-        dataSource.add(new TipoResiduo("Doações"));
+        dataSource.add(new TipoResiduo("Papel",
+                "","https://lh6.googleusercontent.com/gfMLw4Lub59tFk3ERLHxXj8zvZDq2na0xPr9lwkGqWALN7wzO7euPZODA_vZ9VyKKFa-VaNdzfIK9pk_84iJhgl103RNbw=w808-h954"));
+        dataSource.add(new TipoResiduo("Plástico",
+                "","https://lh6.googleusercontent.com/uXm-JP8YABDqit6N91L4phc0PkCxC1uJpMLospD0HwRwCsFA9LycENiGwRW0dpDGVXuXxY5N4W3KnW4lVSss5H1qPD49Cw=w808-h954"));
+        dataSource.add(new TipoResiduo("Metal",
+                "","https://lh5.googleusercontent.com/h05jsS5cN-wUbO0GUIV1rLVYr2jWAgg9Fd2f2ywPO1QTsfv-80XZODfurLCv8fqQMkUfoXneyQ4viYOVTmUNXT7eql_MDA=w808-h954"));
+        dataSource.add(new TipoResiduo("Vidro",
+                "","https://lh6.googleusercontent.com/sW36VZJNUV5swHJAszDWHT-njk8C4M-8YfW-JpmhKX8oPc9Eg88qfzKqDGWYWZqLeU5t5R96J73IMDQpPmz1zWXH9wBQ_g=w808-h954"));
+        dataSource.add(new TipoResiduo("Orgânico",
+                "","https://lh4.googleusercontent.com/fvusIqmJDSZhuO4ZvPFCA_vLBgKeO2fLBuJVA9mZSnsU6aBeonqCMarvZXRB3oZSFm_4DQDZNel31fUGFqDJ8GcayLtocw=w808-h954"));
+        dataSource.add(new TipoResiduo("Lixo não Reciclável",
+                "","https://lh3.googleusercontent.com/xP82Q_3LZ-QBvjgZmxDweYmeyEwVZzSx3YAEWpwscOwcyqF7nOvKoam1Mz63CPViQ4eJ-41MvmubmWiIkBINlFPcwrx3nQ=w808-h954"));
+        dataSource.add(new TipoResiduo("Eletronico",
+                "","https://lh6.googleusercontent.com/FUXjgf907A-XSDPCbPCklcN20eruMwISORsYTzEnX2b3zVzxLzlA0vN9D66eCiOJ29mvRh7eJa_tGEtLEGpCE0lE1MTPZA=w808-h954"));
+        dataSource.add(new TipoResiduo("Hospitalar",
+                "","https://lh5.googleusercontent.com/9R-f6KfszrjP_HuXw571WfubTt2IPVKomimwzKW8zWM7EwxH9nyFyTVL2A68thGxq-iwJ6-3jH6qxC1VBgWDD5mIl7ZqeQ=w808-h954"));
+        dataSource.add(new TipoResiduo("Entulho",
+                "",""));
+        dataSource.add(new TipoResiduo("Doações",
+                "",""));
 
 
         lista = (RecyclerView)viewFragment.findViewById(R.id.listaPrincipal);
@@ -209,11 +227,16 @@ public class ListaResiduosFrag extends Fragment {
         @Override
         public void onBindViewHolder(@NonNull ItemResiduo holder, final int position) {
             TipoResiduo item = lista.get(position);
-
             holder.getTextoMaterial().setText(item.getMaterial());
+            if (item.getUrlImagem().isEmpty()) {
+                holder.getImageMaterial().setImageResource(R.mipmap.ic_logo_to_recycle_2);
+            } else{
+                Picasso.with(contexto).load(item.getUrlImagem()).error(R.mipmap.ic_logo_to_recycle_2).into(holder.getImageMaterial());
+            }
+
+
 
             holder.itemView.setOnClickListener(new View.OnClickListener(){
-
                 @Override
                 public void onClick(View view) {
 
@@ -277,7 +300,6 @@ public class ListaResiduosFrag extends Fragment {
 
             return (lista != null)? lista.size() : 0;
         }
-
 
     }
 }

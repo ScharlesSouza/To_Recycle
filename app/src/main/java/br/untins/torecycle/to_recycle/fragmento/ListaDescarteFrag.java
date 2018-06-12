@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -40,6 +41,7 @@ public class ListaDescarteFrag extends Fragment {
     ArrayList<DescarteModel> dataSource = null;
     View viewFragment = null;
     RecyclerView lista = null;
+    FloatingActionButton botaoFlutuante = null;
     private DatabaseReference mDatabase;
 
 
@@ -57,8 +59,9 @@ public class ListaDescarteFrag extends Fragment {
 
         // Inflate the layout for this fragment
         viewFragment = inflater.inflate(R.layout.fragment_lista_descarte, null);
-
         mDatabase = FirebaseDatabase.getInstance().getReference();
+
+
 /*
         //Acesso ao WebService
         BuscaDadosWebServices busca = new BuscaDadosWebServices(getContext());
@@ -67,9 +70,6 @@ public class ListaDescarteFrag extends Fragment {
 
 */
         dataSource = new ArrayList<>();
-
-
-
 
         lista = (RecyclerView)viewFragment.findViewById(R.id.listaDescarte);
         lista.setLayoutManager(new LinearLayoutManager(getActivity()));
@@ -100,19 +100,22 @@ public class ListaDescarteFrag extends Fragment {
                     @Override
                     public void onCancelled(DatabaseError databaseError) {
                         Log.i("LOG", String.valueOf(databaseError));
-//handle databaseError
+                        //handle databaseError
                     }
-
-
-
                 });
 
-
-
+        botaoFlutuante = viewFragment.findViewById(R.id.descarte_flutuante);
+        botaoFlutuante.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainer, new CadastroDescarteFrag(), "CadastroDescarte").commit();
+            }
+        });
 
         return viewFragment;
 
     }
+
 
 
 

@@ -31,7 +31,7 @@
             tools:layout_editor_absoluteY="6dp" />
 
         <ImageView
-            android:id="@+id/imageView3"
+            android:id="@+id/imageViewResiduo"
             android:layout_width="59dp"
             android:layout_height="56dp"
             android:layout_marginLeft="5dp"

@@ -36,39 +36,47 @@
             android:id="@+id/nav_leis"
             android:icon="@mipmap/ic_martelo_lei"
             android:title="Leis" />
+
         <item
-            android:id="@+id/nav_camera"
-            android:icon="@drawable/ic_menu_camera"
-            android:title="Import" />
-        <item
-            android:id="@+id/nav_galeria"
-            android:icon="@drawable/ic_menu_gallery"
-            android:title="Galeria" />
-        <item
-            android:id="@+id/nav_slideshow"
-            android:icon="@drawable/ic_menu_slideshow"
-            android:title="Slideshow" />
+            android:id="@+id/nav_sobre"
+            android:title="Sobre" />
+
+
+
 
     </group>
+    <!--
+       <item android:title="Communicate">
+           <menu>
 
-    <item android:title="Communicate">
-        <menu>
-            <item
-                android:id="@+id/nav_share"
-                android:icon="@drawable/ic_menu_share"
-                android:title="Share" />
-            <item
-                android:id="@+id/nav_send"
-                android:icon="@drawable/ic_menu_send"
-                android:title="Send" />
-            <item
-                android:id="@+id/nav_manage"
-                android:icon="@drawable/ic_menu_manage"
-                android:title="Configurações" />
-            <item
-                android:id="@+id/nav_sobre"
-                android:title="Sobre" />
-        </menu>
-    </item>
+                <item
+                   android:id="@+id/nav_camera"
+                   android:icon="@drawable/ic_menu_camera"
+                   android:title="Import" />
+               <item
+                   android:id="@+id/nav_galeria"
+                   android:icon="@drawable/ic_menu_gallery"
+                   android:title="Galeria" />
+               <item
+                   android:id="@+id/nav_slideshow"
+                   android:icon="@drawable/ic_menu_slideshow"
+                   android:title="Slideshow" />
 
+               <item
+                   android:id="@+id/nav_share"
+                   android:icon="@drawable/ic_menu_share"
+                   android:title="Share" />
+               <item
+                   android:id="@+id/nav_send"
+                   android:icon="@drawable/ic_menu_send"
+                   android:title="Send" />
+               <item
+                   android:id="@+id/nav_manage"
+                   android:icon="@drawable/ic_menu_manage"
+                   android:title="Configurações" />
+
+
+           </menu>
+       </item>
+       -->
 </menu>

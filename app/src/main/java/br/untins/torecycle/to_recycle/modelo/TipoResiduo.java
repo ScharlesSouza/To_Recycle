@@ -10,18 +10,18 @@ public class TipoResiduo {
 
 
     String material;
+    String Descricao;
+    String urlImagem;
     String cor;
 
 
+    public TipoResiduo(String sMaterial, String sDescricao, String imagem){
 
-
-    public TipoResiduo(String sMaterial){
-
-       setMaterial(sMaterial);
-
+        setMaterial(sMaterial);
+        setDescricao(sDescricao);
+        setUrlImagem(imagem);
 
     }
-
 
 
     public String getMaterial() {
@@ -38,6 +38,18 @@ public class TipoResiduo {
 
     public void setCor(String cor) {
         this.cor = cor;
+    }
+
+    public String getDescricao() {  return Descricao;  }
+
+    public void setDescricao(String descricao) {    Descricao = descricao;   }
+
+    public String getUrlImagem() {
+        return urlImagem;
+    }
+
+    public void setUrlImagem(String urlImagem) {
+        this.urlImagem = urlImagem;
     }
 
 
