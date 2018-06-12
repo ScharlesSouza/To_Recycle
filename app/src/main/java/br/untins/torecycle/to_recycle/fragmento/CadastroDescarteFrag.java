@@ -2,23 +2,31 @@ package br.untins.torecycle.to_recycle.fragmento;
 
 
 import android.Manifest;
+import android.app.Activity;
+import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
+import android.provider.MediaStore;
 import android.provider.Settings;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -27,6 +35,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -37,6 +46,7 @@ import com.google.android.gms.location.LocationServices;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -57,6 +67,10 @@ public class CadastroDescarteFrag extends Fragment implements GoogleApiClient.Co
     Button btnCadastro;
     EditText campoDescricao;
     TextView txtLatitude, txtLongitude, txtCidade, txtEstado, txtPais;
+    ImageView campoFoto;
+    private String caminhoFoto;
+    public static final int CODIGO_CAMERA = 567;
+    Uri imageUri;
 
     private Location location;
     private LocationManager locationManager;
@@ -119,7 +133,18 @@ public class CadastroDescarteFrag extends Fragment implements GoogleApiClient.Co
         ArrayAdapter adapter = ArrayAdapter.createFromResource(getActivity().getApplicationContext(), R.array.ListaMaterial, android.R.layout.simple_spinner_item);
         spinnerMaterial.setAdapter(adapter);
 
+        campoFoto = (ImageView)viewFragment.findViewById(R.id.imageViewFoto);
+
         campoDescricao = (EditText) viewFragment.findViewById(R.id.descricaoCadastro);
+
+
+        campoFoto.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+               takePhoto();
+            }
+        });
+
 
 
        //chama o mapa com a localização atual do usuario
@@ -419,6 +444,43 @@ public class CadastroDescarteFrag extends Fragment implements GoogleApiClient.Co
     public void onProviderDisabled(String provider) {
 
     }//FIM DOS METODOS DA CLASSE LOCATIONLISTENER
+
+
+
+    public void takePhoto() {
+        Intent intent = new Intent("android.media.action.IMAGE_CAPTURE");
+        File photo = new File(Environment.getExternalStorageDirectory(),  "Pic.jpg");
+        intent.putExtra(MediaStore.EXTRA_OUTPUT,  Uri.fromFile(photo));
+        imageUri = Uri.fromFile(photo);
+        getActivity().startActivityForResult(intent, 100);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        switch (requestCode) {
+            case 100:
+                if (resultCode == Activity.RESULT_OK) {
+                    Uri selectedImage = imageUri;
+                    getActivity().getContentResolver().notifyChange(selectedImage, null);
+                    ContentResolver cr = getActivity().getContentResolver();
+                    Bitmap bitmap;
+                    try {
+                        bitmap = android.provider.MediaStore.Images.Media
+                                .getBitmap(cr, selectedImage);
+
+                        campoFoto.setImageBitmap(bitmap);
+                        Toast.makeText(getActivity(), selectedImage.toString(),
+                                Toast.LENGTH_LONG).show();
+                    } catch (Exception e) {
+                        Toast.makeText(getActivity(), "Failed to load", Toast.LENGTH_SHORT)
+                                .show();
+                        Log.e("Camera", e.toString());
+                    }
+                }
+        }
+    }
+
 
 
 
