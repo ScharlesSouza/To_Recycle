@@ -1,0 +1,52 @@
+[
+  {
+    "id": 1,
+    "tipo": "lote",
+    "reponsavel": "Alberto Alves",
+    "contato1": "63 99237 - 9922",
+    "desc": "Lote a venda. Parcelado ou à vista.",
+    "urlFoto": "http://www.livroandroid.com.br/livro/carros/esportivos/Ferrari_FF.png",
+    "latitude": "-10.190224",
+    "longitude": "-48.360551"
+  },
+  {
+    "id": 2,
+    "tipo": "lote",
+    "reponsavel": "Weslley Quadros",
+    "contato1": "63 99237 - 1122",
+    "desc": "Lote a venda. À vista.",
+    "urlFoto": "http://www.livroandroid.com.br/livro/carros/esportivos/Ferrari_FF.png",
+    "latitude": "-10.191979",
+    "longitude": "-48.362966"
+  },
+  {
+    "id": 3,
+    "tipo": "lote",
+    "reponsavel": "Matheus José",
+    "contato1": "63 99237 - 2233",
+    "desc": "Lote a venda. Próximo a praia da graciosa. Acesso direto para a avenida JK.",
+    "urlFoto": "http://www.livroandroid.com.br/livro/carros/esportivos/Ferrari_FF.png",
+    "latitude": "-10.186963",
+    "longitude": "-48.360584"
+  },
+  {
+    "id": 4,
+    "tipo": "lote",
+    "reponsavel": "Apoliane Farias",
+    "contato1": "63 99237 - 3344",
+    "desc": "Lote a venda. Próximo a praia da graciosa.",
+    "urlFoto": "http://www.livroandroid.com.br/livro/carros/esportivos/Ferrari_FF.png",
+    "latitude": "-10.195610",
+    "longitude": "-48.360480"
+  },
+  {
+    "id": 5,
+    "tipo": "lote",
+    "reponsavel": "Scharles Souza",
+    "contato1": "63 99237 - 5566",
+    "desc": "Lote a venda. Próximo ao club da PM.",
+    "urlFoto": "http://www.livroandroid.com.br/livro/carros/esportivos/Ferrari_FF.png",
+    "latitude": "-10.195610",
+    "longitude": "-48.360480"
+  }
+]

@@ -24,6 +24,7 @@
         android:clickable="true"
         android:onClick="chamaCadastro"
         android:src="@android:drawable/ic_menu_add"
-        android:backgroundTint="@color/colorAccent" />
+        android:backgroundTint="@color/colorAccent"
+        android:layout_gravity="bottom|end"/>
 
 </FrameLayout>
