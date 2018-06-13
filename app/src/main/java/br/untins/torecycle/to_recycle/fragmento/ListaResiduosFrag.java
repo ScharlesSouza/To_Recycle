@@ -70,19 +70,46 @@ public class ListaResiduosFrag extends Fragment {
         //Adicionando fixamente os itens, exemplo
 
         dataSource.add(new TipoResiduo("Papel",
-                "","https://lh6.googleusercontent.com/gfMLw4Lub59tFk3ERLHxXj8zvZDq2na0xPr9lwkGqWALN7wzO7euPZODA_vZ9VyKKFa-VaNdzfIK9pk_84iJhgl103RNbw=w808-h954"));
+                "Papel - Tempo de decomposição (03 a 06 meses)" +
+                        "\nA reciclagem do papel é de extrema importância para o meio ambiente. Como sabemos, o papel é produzido através da celulose de determinados tipos de árvores. Quando reciclamos o papel ou compramos papel reciclado estamos contribuindo com o meio ambiente, pois árvores deixaram de ser cortadas.",
+                "https://lh6.googleusercontent.com/gfMLw4Lub59tFk3ERLHxXj8zvZDq2na0xPr9lwkGqWALN7wzO7euPZODA_vZ9VyKKFa-VaNdzfIK9pk_84iJhgl103RNbw=w808-h954"));
         dataSource.add(new TipoResiduo("Plástico",
-                "","https://lh6.googleusercontent.com/uXm-JP8YABDqit6N91L4phc0PkCxC1uJpMLospD0HwRwCsFA9LycENiGwRW0dpDGVXuXxY5N4W3KnW4lVSss5H1qPD49Cw=w808-h954"));
+                "Plastico - Tempo de decomposicao (450 anos)" +
+                        "\nA reciclagem de plástico consiste no processo de reciclagem de artefatos fabricados a partir de resinas (polímeros), geralmente sintéticas e derivadas do petróleo.",
+                "https://lh6.googleusercontent.com/uXm-JP8YABDqit6N91L4phc0PkCxC1uJpMLospD0HwRwCsFA9LycENiGwRW0dpDGVXuXxY5N4W3KnW4lVSss5H1qPD49Cw=w808-h954"));
         dataSource.add(new TipoResiduo("Metal",
-                "","https://lh5.googleusercontent.com/h05jsS5cN-wUbO0GUIV1rLVYr2jWAgg9Fd2f2ywPO1QTsfv-80XZODfurLCv8fqQMkUfoXneyQ4viYOVTmUNXT7eql_MDA=w808-h954"));
+                "Metal - Tempo de decomposição ( + 100 anos)" +
+                        "\nO metal é um dos produtos mais utilizados nas tarefas do dia-a-dia. Encontramos embalagens de metais, fios e outros produtos metálicos em diversos produtos. Ao ser descartado por pessoas e empresas, pode passar por um processo de reciclagem que garante seu reaproveitamento na produção do metal reciclado. O aço após ser reciclado volta para a cadeia produtiva para ser transformado em latas e peças automotivas, por exemplo.",
+                "https://lh5.googleusercontent.com/h05jsS5cN-wUbO0GUIV1rLVYr2jWAgg9Fd2f2ywPO1QTsfv-80XZODfurLCv8fqQMkUfoXneyQ4viYOVTmUNXT7eql_MDA=w808-h954"));
         dataSource.add(new TipoResiduo("Vidro",
-                "","https://lh6.googleusercontent.com/sW36VZJNUV5swHJAszDWHT-njk8C4M-8YfW-JpmhKX8oPc9Eg88qfzKqDGWYWZqLeU5t5R96J73IMDQpPmz1zWXH9wBQ_g=w808-h954"));
+                "Vidro - Tempo de decomposição (1 milhão de ano)" +
+                        "\nO vidro é um dos produtos mais utilizados nas tarefas do dia-a-dia. Ao ser descartado por pessoas e empresas, pode passar por um processo de reciclagem que garante seu reaproveitamento na produção do vidro reciclado. O vidro reciclado tem praticamente todas as características do vidro comum. Ele pode ser reciclado muitas vezes sem perder sua características e qualidade.",
+                "https://lh6.googleusercontent.com/sW36VZJNUV5swHJAszDWHT-njk8C4M-8YfW-JpmhKX8oPc9Eg88qfzKqDGWYWZqLeU5t5R96J73IMDQpPmz1zWXH9wBQ_g=w808-h954"));
         dataSource.add(new TipoResiduo("Orgânico",
-                "","https://lh4.googleusercontent.com/fvusIqmJDSZhuO4ZvPFCA_vLBgKeO2fLBuJVA9mZSnsU6aBeonqCMarvZXRB3oZSFm_4DQDZNel31fUGFqDJ8GcayLtocw=w808-h954"));
+                "Orgânico - Tempo de decomposição (1 a 3 meses)" +
+                        "\nLixo orgânico é todo resíduo de origem vegetal ou animal, ou seja, todo lixo originário de um ser vivo. Este tipo de lixo é produzido nas residências, escolas, empresas e pela natureza.",
+                "https://lh4.googleusercontent.com/fvusIqmJDSZhuO4ZvPFCA_vLBgKeO2fLBuJVA9mZSnsU6aBeonqCMarvZXRB3oZSFm_4DQDZNel31fUGFqDJ8GcayLtocw=w808-h954"));
         dataSource.add(new TipoResiduo("Lixo não Reciclável",
-                "","https://lh3.googleusercontent.com/xP82Q_3LZ-QBvjgZmxDweYmeyEwVZzSx3YAEWpwscOwcyqF7nOvKoam1Mz63CPViQ4eJ-41MvmubmWiIkBINlFPcwrx3nQ=w808-h954"));
+                "Lixo não Reciclável" +
+                        "\nA reciclagem é um ato de extrema importância nos dias atuais. Além de ajudar na preservação do meio ambiente, gera renda para milhares de pessoas. Porém, por questões técnicas, nem todos os materiais descartados por pessoas ou indústrias podem passar pelo processo de reciclagem. Estes, após passarem por processos industriais, não podem ser reutilizados. Grande parte destes materiais não recicláveis tem como destino o lixo comum.\n" +
+                        "Exemplos de lixo eletrônico:\n" +
+                        "\n" +
+                        "- Monitores de Computadores\n" +
+                        "\n" +
+                        "- Telefones Celulares e baterias\n" +
+                        "\n" +
+                        "- Computadores\n" +
+                        "\n" +
+                        "- Televisores\n" +
+                        "\n" +
+                        "- Câmeras Fotográficas\n" +
+                        "\n" +
+                        "- Impressoras",
+                "https://lh3.googleusercontent.com/xP82Q_3LZ-QBvjgZmxDweYmeyEwVZzSx3YAEWpwscOwcyqF7nOvKoam1Mz63CPViQ4eJ-41MvmubmWiIkBINlFPcwrx3nQ=w808-h954"));
         dataSource.add(new TipoResiduo("Eletronico",
-                "","https://lh6.googleusercontent.com/FUXjgf907A-XSDPCbPCklcN20eruMwISORsYTzEnX2b3zVzxLzlA0vN9D66eCiOJ29mvRh7eJa_tGEtLEGpCE0lE1MTPZA=w808-h954"));
+                "Lixo Eletrônico" +
+                        "\nOs resíduos de serviços de saúde (RSS), comumente associados à denominação lixo hospitalar ou resíduo hospitalar, é o nome que se dá aos resíduos originários de ações médicas desenvolvidas em unidades de prestação de cuidados de saúde, em atividades de prevenção, diagnóstico, tratamento, reabilitação e investigação relacionada com seres humanos ou animais, em farmácias, em atividades médico-legais, de ensino e em quaisquer outras que envolvam procedimentos invasivos\n",
+                "https://lh6.googleusercontent.com/FUXjgf907A-XSDPCbPCklcN20eruMwISORsYTzEnX2b3zVzxLzlA0vN9D66eCiOJ29mvRh7eJa_tGEtLEGpCE0lE1MTPZA=w808-h954"));
         dataSource.add(new TipoResiduo("Hospitalar",
                 "","https://lh5.googleusercontent.com/9R-f6KfszrjP_HuXw571WfubTt2IPVKomimwzKW8zWM7EwxH9nyFyTVL2A68thGxq-iwJ6-3jH6qxC1VBgWDD5mIl7ZqeQ=w808-h954"));
         dataSource.add(new TipoResiduo("Entulho",
@@ -245,8 +272,8 @@ public class ListaResiduosFrag extends Fragment {
                     String posicao = Integer.toString(position);
                     Log.d("posicao", posicao);
                     intent.putExtra("Nome", lista.get(position).getMaterial());
-
-
+                    intent.putExtra("descricao",lista.get(position).getDescricao());
+                    intent.putExtra("imagem", lista.get(position).getUrlImagem());
 
                     contexto.startActivity(intent);
 

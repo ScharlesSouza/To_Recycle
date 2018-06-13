@@ -24,6 +24,7 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.provider.Settings;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
@@ -45,12 +46,21 @@ import android.widget.Toast;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.storage.FileDownloadTask;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -85,6 +95,7 @@ public class CadastroDescarteFrag extends Fragment implements GoogleApiClient.Co
 
     private GoogleApiClient mGoogleApiClient;
     private DatabaseReference mDatabase;
+    private StorageReference mStorageRef;
 
     /*###################################################################################################*/
     //GET E SET DA LATITUDE
@@ -132,6 +143,8 @@ public class CadastroDescarteFrag extends Fragment implements GoogleApiClient.Co
 
         //instancia do banco de dados FireBase
         mDatabase = FirebaseDatabase.getInstance().getReference();
+        mStorageRef = FirebaseStorage.getInstance().getReference();
+
 
         spinnerMaterial = (Spinner) viewFragment.findViewById(R.id.SpinnerMaterial);
         ArrayAdapter adapter = ArrayAdapter.createFromResource(getActivity().getApplicationContext(), R.array.ListaMaterial, android.R.layout.simple_spinner_item);
@@ -590,6 +603,7 @@ public class CadastroDescarteFrag extends Fragment implements GoogleApiClient.Co
                                     .getBitmap(cr, selectedImage);
 
                             campoFoto.setImageBitmap(bitmap);
+                            gravaImageFirebase(caminhoFoto,"imagem");
                             Toast.makeText(getActivity(), selectedImage.toString(),
                                     Toast.LENGTH_LONG).show();
                         } catch (Exception e) {
@@ -602,5 +616,57 @@ public class CadastroDescarteFrag extends Fragment implements GoogleApiClient.Co
             }
         }
     }
+
+    public void gravaImageFirebase(String caminho, String descarte){
+
+
+        Uri file = Uri.fromFile(new File(caminho));
+        StorageReference riversRef = mStorageRef.child(descarte);
+
+        riversRef.putFile(file)
+                .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                    @Override
+                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                        // Get a URL to the uploaded content
+                        Uri downloadUrl = taskSnapshot.getDownloadUrl();
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception exception) {
+                        // Handle unsuccessful uploads
+                        // ...
+                    }
+                });
+    }
+
+    public void pegarImagemFirebase(String descarte){
+
+        File localFile = null;
+        try {
+            localFile = File.createTempFile("images", "jpg");
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        StorageReference riversRef = mStorageRef.child("imagem");;
+        riversRef.getFile(localFile)
+                .addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
+                    @Override
+                    public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
+                        // Successfully downloaded data to local file
+                        // ...
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception exception) {
+                // Handle failed download
+                // ...
+            }
+        });
+    }
+
+
 
 }
